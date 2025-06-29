@@ -19,10 +19,11 @@ public class Player {
         this.position = position;
         this.width = textureRegion.getRegionWidth();
         this.height = textureRegion.getRegionHeight();
+        System.out.println(width + " " + height);
         this.isSprinting = false;
     }
 
-    public void handleInputs(float delta){
+    public void handleInputs(float delta) {
         Vector2 dir = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             dir.x -= 1;
@@ -43,7 +44,7 @@ public class Player {
         }
 
         float speed = ACCELERATION * delta;
-        if (isSprinting){
+        if (isSprinting) {
             speed *= 1.5;
         }
 
@@ -58,11 +59,11 @@ public class Player {
     }
 
     public void render(SpriteBatch batch) {
-        float targetSize = 512f / 2;
+        final float targetSize = 512f / 2;
         batch.draw(
                 textureRegion,
-                position.x - width / 2f,
-                position.y - height / 2f,
+                position.x - targetSize / 2f,
+                position.y - targetSize / 2f,
                 targetSize,
                 targetSize);
     }
