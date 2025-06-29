@@ -2,12 +2,12 @@ package com.terrescalmes;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -35,9 +35,27 @@ public class Main extends ApplicationAdapter {
         player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612), new Vector2(0, 0));
     }
 
+    private void handleClick() {
+        if (Gdx.input.justTouched()) {
+            int mouseX = Gdx.input.getX();
+            int mouseY = Gdx.input.getY();
+
+            Vector3 world3 = new Vector3(mouseX, mouseY, 0);
+            camera.unproject(world3);
+            Vector2 world2 = new Vector2(world3.x, world3.y);
+
+            Vector2 target = CameraManager.displayToGameCoordinates(world2); // coordinate on the map; to clic on tiles
+
+            if (player.screenBounds.contains(world2)) {
+                player.takeDamage(0);
+            }
+        }
+    }
+
     private void update(float delta) {
         player.update(delta);
-        camera.position.set(player.position.x, player.position.y, 0);
+        camera.position.set(player.position.x * CameraManager.CUBE_WIDTH,
+                player.position.y * CameraManager.CUBE_HEIGHT, 0);
         camera.update();
     }
 
@@ -46,7 +64,8 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         // input
-        cameraInput(delta);
+        handleClick();
+        camera.handleInputs(delta);
         player.handleInputs(delta);
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
@@ -64,7 +83,7 @@ public class Main extends ApplicationAdapter {
         renderMousePointer();
     }
 
-    public void renderMousePointer() {
+    private void renderMousePointer() {
         int mouseX = Gdx.input.getX();
         int mouseY = Gdx.input.getY();
 
@@ -80,19 +99,9 @@ public class Main extends ApplicationAdapter {
         shapeRenderer.end();
     }
 
-    @Override
     public void dispose() {
         batch.dispose();
         image.dispose();
         shapeRenderer.dispose();
-    }
-
-    private void cameraInput(float delta) {
-        if (Gdx.input.isKeyPressed(Input.Keys.Z) && camera.zoom > 0.005) {
-            camera.zoom -= 0.005;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.X)) {
-            camera.zoom += 0.005;
-        }
     }
 }

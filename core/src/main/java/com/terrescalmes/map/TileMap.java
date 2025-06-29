@@ -42,8 +42,10 @@ public class TileMap {
         textureRegionMap.put("grass_cube",
                 new TextureRegion(textureMap.get("cubes"), 0, 0, CameraManager.CUBE_WIDTH, CameraManager.CUBE_HEIGHT));
         textureRegionMap.put("water_cube",
-
                 new TextureRegion(textureMap.get("cubes"), 0, 2 * CameraManager.CUBE_HEIGHT, CameraManager.CUBE_WIDTH,
+                        CameraManager.CUBE_HEIGHT));
+        textureRegionMap.put("random",
+                new TextureRegion(textureMap.get("cubes"), 0, 3 * CameraManager.CUBE_HEIGHT, CameraManager.CUBE_WIDTH,
                         CameraManager.CUBE_HEIGHT));
 
         textureMap.put("trees", new Texture("map/256x512_Trees.png"));
@@ -92,7 +94,7 @@ public class TileMap {
                     textureName = "grass_cube";
 
                     int num = r.nextInt(100);
-                    if (num > 90) {
+                    if (num > 190) {
                         objects.add(new Tile(this.textureRegionMap.get("first_tree"),
                                 new Vector2(x, y), true));
                     }
@@ -105,5 +107,7 @@ public class TileMap {
                 }
             }
         }
+        // objects.add(new Tile(this.textureRegionMap.get("random"),
+        // new Vector2(0, 0), true));
     }
 }
