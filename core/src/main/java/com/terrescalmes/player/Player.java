@@ -7,16 +7,19 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class Player {
-    private static final int ACCELERATION = 500;
+    private static final int ACCELERATION = 400;
+
     private TextureRegion textureRegion;
     public Vector2 position;
     private float width, height;
+    private boolean isSprinting;
 
     public Player(TextureRegion textureRegion, Vector2 position) {
         this.textureRegion = textureRegion;
         this.position = position;
         this.width = textureRegion.getRegionWidth();
         this.height = textureRegion.getRegionHeight();
+        this.isSprinting = false;
     }
 
     public void update(float delta) {
@@ -33,8 +36,16 @@ public class Player {
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             dir.y -= 1;
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            isSprinting = true;
+        } else {
+            isSprinting = false;
+        }
 
         float speed = ACCELERATION * delta;
+        if (isSprinting){
+            speed *= 1.5;
+        }
 
         if (dir.len() > 0) {
             dir.nor(); // longueur = 1

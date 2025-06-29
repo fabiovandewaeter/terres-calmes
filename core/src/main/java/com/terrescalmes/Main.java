@@ -17,6 +17,9 @@ import com.terrescalmes.player.Player;
  * platforms.
  */
 public class Main extends ApplicationAdapter {
+    private static final int DISPLAY_WIDTH = 1920;
+    private static final int DISPLAY_HEIGHT = 1080;
+
     private SpriteBatch batch;
     private Texture image;
     private TextureRegion[] texture_regions;
@@ -30,7 +33,7 @@ public class Main extends ApplicationAdapter {
         image = new Texture("map/256x192_Tiles.png");
         texture_regions = new TextureRegion[] { new TextureRegion(image, 0, 0, 256, 192) };
 
-        camera = new OrthographicCamera(1920, 1080);
+        camera = new OrthographicCamera(DISPLAY_WIDTH, DISPLAY_HEIGHT);
         map = new TileMap();
 
         player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612), new Vector2(0, 0));
@@ -47,13 +50,11 @@ public class Main extends ApplicationAdapter {
         // update
         float delta = Gdx.graphics.getDeltaTime();
         update(delta);
+        cameraInput(delta);
 
         // render
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.setProjectionMatrix(camera.combined);
-
-        cameraInput();
-        camera.update();
 
         batch.begin();
         map.render(batch);
@@ -67,7 +68,7 @@ public class Main extends ApplicationAdapter {
         image.dispose();
     }
 
-    private void cameraInput() {
+    private void cameraInput(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.Z) && camera.zoom > 0.005) {
             camera.zoom -= 0.005;
         }
