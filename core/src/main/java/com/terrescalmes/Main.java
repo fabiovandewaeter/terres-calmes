@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -20,7 +19,6 @@ import com.terrescalmes.map.TileMap;
  */
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private Texture image;
     private CameraManager camera;
     private ShapeRenderer shapeRenderer;
     private TileMap map;
@@ -101,7 +99,6 @@ public class Main extends ApplicationAdapter {
 
     public void dispose() {
         batch.dispose();
-        image.dispose();
         shapeRenderer.dispose();
     }
 }
