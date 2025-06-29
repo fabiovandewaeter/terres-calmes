@@ -39,4 +39,7 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 
 ## Commandes
 
-`./gradlew lwjgl3:run --continuous`
+```bash
+./gradlew lwjgl3:run --continuous
+./gradlew core:clean core:test
+```
