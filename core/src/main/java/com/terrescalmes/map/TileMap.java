@@ -1,4 +1,4 @@
-package com.fabiovandewaeter.terrescalmes.map;
+package com.terrescalmes.map;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -17,7 +17,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 public class TileMap {
-
     private static final int MAP_SIZE = 4;
     private static final int TILE_WIDTH = 256;
     private static final int TILE_HEIGHT = 192;
@@ -105,7 +104,7 @@ public class TileMap {
                 }
                 if (textureName != "") {
                     base.add(
-                            new Tile(this.textureRegionMap.get(textureName), new Vector2(row, col), new Vector2(x, y)));
+                            new Tile(this.textureRegionMap.get(textureName), new Vector2(x, y)));
                 }
             }
         }
@@ -117,12 +116,12 @@ public class TileMap {
             System.out.print("\n");
         }
 
-        objects.add(new Tile(this.textureRegionMap.get("first_tree"), new Vector2(0, 0),
+        objects.add(new Tile(this.textureRegionMap.get("first_tree"),
                 new Vector2((0 - 0) * (CUBE_WIDTH / 2f), (0 + 0) * (CUBE_HEIGHT / 4f) - CUBE_HEIGHT / 2f)));
-        objects.add(new Tile(this.textureRegionMap.get("first_tree"), new Vector2(0, 0),
+        objects.add(new Tile(this.textureRegionMap.get("first_tree"),
                 // new Vector2(500, 0)));
                 new Vector2((3 - 0) * (CUBE_WIDTH / 2f), (3 + 0) * (CUBE_HEIGHT / 4f) - CUBE_HEIGHT / 2f)));
-        objects.add(new Tile(this.textureRegionMap.get("first_tree"), new Vector2(0, 0),
+        objects.add(new Tile(this.textureRegionMap.get("first_tree"),
                 // new Vector2(500, 500)));
                 new Vector2((3 - 3) * (CUBE_WIDTH / 2f), (3 + 3) * (CUBE_HEIGHT / 4f) - CUBE_HEIGHT / 2f)));
     }

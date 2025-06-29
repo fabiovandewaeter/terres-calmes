@@ -1,4 +1,4 @@
-package com.fabiovandewaeter.terrescalmes;
+package com.terrescalmes;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
@@ -7,8 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.fabiovandewaeter.terrescalmes.map.TileMap;
+import com.terrescalmes.map.TileMap;
+import com.terrescalmes.player.Player;
 
 /**
  * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
@@ -20,6 +22,7 @@ public class Main extends ApplicationAdapter {
     private TextureRegion[] texture_regions;
     private OrthographicCamera camera;
     private TileMap map;
+    private Player player;
 
     @Override
     public void create() {
@@ -29,10 +32,23 @@ public class Main extends ApplicationAdapter {
 
         camera = new OrthographicCamera(1920, 1080);
         map = new TileMap();
+
+        player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612), new Vector2(0, 0));
+    }
+
+    private void update(float delta) {
+        player.update(delta);
+        camera.position.set(player.position.x, player.position.y, 0);
+        camera.update();
     }
 
     @Override
     public void render() {
+        // update
+        float delta = Gdx.graphics.getDeltaTime();
+        update(delta);
+
+        // render
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
         batch.setProjectionMatrix(camera.combined);
 
@@ -40,8 +56,8 @@ public class Main extends ApplicationAdapter {
         camera.update();
 
         batch.begin();
-        // batch.draw(texture_regions[0], 0, 0);
         map.render(batch);
+        player.render(batch);
         batch.end();
     }
 
@@ -52,18 +68,6 @@ public class Main extends ApplicationAdapter {
     }
 
     private void cameraInput() {
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            camera.position.x -= 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            camera.position.x += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            camera.position.y += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            camera.position.y -= 1;
-        }
         if (Gdx.input.isKeyPressed(Input.Keys.Z) && camera.zoom > 0.005) {
             camera.zoom -= 0.005;
         }

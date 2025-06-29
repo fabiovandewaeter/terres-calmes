@@ -1,9 +1,9 @@
-package com.fabiovandewaeter.terrescalmes;
+package com.terrescalmes.map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import com.fabiovandewaeter.terrescalmes.map.TileMap;
+import com.terrescalmes.map.TileMap;
 
 class TileMapTest {
 
