@@ -3,7 +3,6 @@ package com.terrescalmes;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -19,7 +18,8 @@ import com.terrescalmes.player.Player;
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture image;
-    private OrthographicCamera camera;
+    // private OrthographicCamera camera;
+    private CameraManager camera;
     private TileMap map;
     private Player player;
 
@@ -27,7 +27,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
 
-        camera = new OrthographicCamera(CameraManager.DISPLAY_WIDTH, CameraManager.DISPLAY_HEIGHT);
+        camera = new CameraManager();
         map = new TileMap();
 
         player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612), new Vector2(0, 0));
