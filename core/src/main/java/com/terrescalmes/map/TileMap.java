@@ -15,13 +15,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.terrescalmes.CameraManager;
 
 public class TileMap {
-    private static final int MAP_SIZE = 4;
+    private static final int MAP_SIZE = 20;
     private static final int TILE_WIDTH = 256;
     private static final int TILE_HEIGHT = 192;
-    private static final int CUBE_WIDTH = 256;
-    private static final int CUBE_HEIGHT = 256;
     private static final int TREE_WIDTH = 256;
     private static final int TREE_HEIGHT = 512;
 
@@ -40,9 +39,12 @@ public class TileMap {
                 new TextureRegion(textureMap.get("tiles"), 0, 3 * 192, TILE_WIDTH, TILE_HEIGHT));
 
         textureMap.put("cubes", new Texture("map/256x256_Cubes.png"));
-        textureRegionMap.put("grass_cube", new TextureRegion(textureMap.get("cubes"), 0, 0, CUBE_WIDTH, CUBE_HEIGHT));
+        textureRegionMap.put("grass_cube",
+                new TextureRegion(textureMap.get("cubes"), 0, 0, CameraManager.CUBE_WIDTH, CameraManager.CUBE_HEIGHT));
         textureRegionMap.put("water_cube",
-                new TextureRegion(textureMap.get("cubes"), 0, 2 * CUBE_HEIGHT, CUBE_WIDTH, CUBE_HEIGHT));
+
+                new TextureRegion(textureMap.get("cubes"), 0, 2 * CameraManager.CUBE_HEIGHT, CameraManager.CUBE_WIDTH,
+                        CameraManager.CUBE_HEIGHT));
 
         textureMap.put("trees", new Texture("map/256x512_Trees.png"));
         textureRegionMap.put("first_tree", new TextureRegion(textureMap.get("trees"), 0, 0, TREE_WIDTH, TREE_HEIGHT));
@@ -58,11 +60,6 @@ public class TileMap {
     }
 
     public void render(SpriteBatch batch) {
-        /*
-         * for (Tile t : this.base) {
-         * t.render(batch);
-         * }
-         */
         ListIterator<Tile> it = this.base.listIterator(this.base.size());
         while (it.hasPrevious()) {
             Tile element = it.previous();
@@ -87,17 +84,17 @@ public class TileMap {
         Random r = new Random();
         for (int row = MAP_SIZE - 1; row >= 0; row--) {
             for (int col = MAP_SIZE - 1; col >= 0; col--) {
-                float x = (col - row) * (CUBE_WIDTH / 2f);
-                float y = (col + row) * (CUBE_HEIGHT / 4f);
+                float x = col;
+                float y = row;
 
                 String textureName = "";
                 if (map[row][col].equals("g")) {
                     textureName = "grass_cube";
 
                     int num = r.nextInt(100);
-                    if (num > 70) {
-                        // objects.add(new Tile(this.textureRegionMap.get("first_tree"), new
-                        // Vector2(row, col),new Vector2(x, y)));
+                    if (num > 90) {
+                        objects.add(new Tile(this.textureRegionMap.get("first_tree"),
+                                new Vector2(x, y), true));
                     }
                 } else if (map[row][col].equals("w")) {
                     textureName = "water_cube";
@@ -108,21 +105,5 @@ public class TileMap {
                 }
             }
         }
-
-        for (int row = 0; row < MAP_SIZE; row++) {
-            for (int col = 0; col < MAP_SIZE; col++) {
-                System.out.print(map[row][col]);
-            }
-            System.out.print("\n");
-        }
-
-        objects.add(new Tile(this.textureRegionMap.get("first_tree"),
-                new Vector2((0 - 0) * (CUBE_WIDTH / 2f), (0 + 0) * (CUBE_HEIGHT / 4f) - CUBE_HEIGHT / 2f)));
-        objects.add(new Tile(this.textureRegionMap.get("first_tree"),
-                // new Vector2(500, 0)));
-                new Vector2((3 - 0) * (CUBE_WIDTH / 2f), (3 + 0) * (CUBE_HEIGHT / 4f) - CUBE_HEIGHT / 2f)));
-        objects.add(new Tile(this.textureRegionMap.get("first_tree"),
-                // new Vector2(500, 500)));
-                new Vector2((3 - 3) * (CUBE_WIDTH / 2f), (3 + 3) * (CUBE_HEIGHT / 4f) - CUBE_HEIGHT / 2f)));
     }
 }

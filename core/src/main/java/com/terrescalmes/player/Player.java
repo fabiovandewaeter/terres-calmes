@@ -22,7 +22,7 @@ public class Player {
         this.isSprinting = false;
     }
 
-    public void update(float delta) {
+    public void handleInputs(float delta){
         Vector2 dir = new Vector2();
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             dir.x -= 1;
@@ -52,6 +52,9 @@ public class Player {
             dir.scl(speed); // vitesse constante
             position.add(dir); // on bouge le joueur
         }
+    }
+
+    public void update(float delta) {
     }
 
     public void render(SpriteBatch batch) {
