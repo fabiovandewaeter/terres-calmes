@@ -58,4 +58,8 @@ public class Entity {
     public boolean collide(Vector2 position) {
         return hitbox.contains(position);
     }
+
+    public boolean isDead() {
+        return HP <= 0;
+    }
 }

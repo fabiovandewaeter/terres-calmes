@@ -22,7 +22,7 @@ public class Main extends ApplicationAdapter {
     private CameraManager camera;
     private ShapeRenderer shapeRenderer;
     private TileMap map;
-    private Player player;
+    private EntityManager entityManager;
 
     @Override
     public void create() {
@@ -30,7 +30,9 @@ public class Main extends ApplicationAdapter {
         camera = new CameraManager();
         shapeRenderer = new ShapeRenderer();
         map = new TileMap();
-        player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612), new Vector2(0, 0));
+        entityManager = EntityManager.getInstance();
+        entityManager.add(
+                new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612), new Vector2(0, 0)));
     }
 
     private void handleClick() {
@@ -44,16 +46,19 @@ public class Main extends ApplicationAdapter {
 
             Vector2 target = CameraManager.displayToGameCoordinates(world2); // coordinate on the map; to clic on tiles
 
-            if (player.screenBounds.contains(world2)) {
-                player.takeDamage(0);
-            }
+            entityManager.handleClick(world2);
         }
     }
 
     private void update(float delta) {
-        player.update(delta);
-        camera.position.set(player.position.x * CameraManager.CUBE_WIDTH,
-                player.position.y * CameraManager.CUBE_HEIGHT, 0);
+        entityManager.update(delta);
+        Player player = entityManager.getPlayer();
+        if (player != null) {
+            camera.position.set(player.position.x * CameraManager.CUBE_WIDTH,
+                    player.position.y * CameraManager.CUBE_HEIGHT, 0);
+        } else {
+            camera.position.set(0, 0, 0);
+        }
         camera.update();
     }
 
@@ -64,7 +69,7 @@ public class Main extends ApplicationAdapter {
         // input
         handleClick();
         camera.handleInputs(delta);
-        player.handleInputs(delta);
+        entityManager.handleInputs(delta);
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         // update
@@ -75,7 +80,7 @@ public class Main extends ApplicationAdapter {
 
         batch.begin();
         map.render(batch);
-        player.render(batch);
+        entityManager.render(batch);
         batch.end();
 
         renderMousePointer();
