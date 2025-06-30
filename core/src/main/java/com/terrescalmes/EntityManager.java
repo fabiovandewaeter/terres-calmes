@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.entities.Player;
@@ -58,6 +59,11 @@ public class EntityManager {
             if (entity.isDead()) {
                 deadEntityIndexes.add(i);
             }
+            if (entity.hitbox.contains(1, 1)) {
+                System.out.println("touche");
+            } else {
+                System.out.println("NON");
+            }
         }
 
         for (Integer index : deadEntityIndexes) {
@@ -68,6 +74,12 @@ public class EntityManager {
     public void render(SpriteBatch batch) {
         for (Entity entity : entities) {
             entity.render(batch);
+        }
+    }
+
+    public void renderHitboxes(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+        for (Entity entity : entities) {
+            entity.renderHitbox(batch, shapeRenderer);
         }
     }
 

@@ -15,23 +15,19 @@ public class Player extends Entity {
         Vector2 dir = new Vector2();
 
         // Déplacement isométrique : les touches correspondent aux directions à l'écran
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) { // Gauche à l'écran = -x +y dans le jeu
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             dir.x -= 1;
             dir.y += 1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) { // Droite à l'écran = +x -y dans le jeu
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             dir.x += 1;
             dir.y -= 1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) { // Haut à l'écran = +x +y dans le jeu
-            // dir.x += 1;
-            // dir.y += 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             dir.x -= 1;
             dir.y -= 1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) { // Bas à l'écran = -x -y dans le jeu
-            // dir.x -= 1;
-            // dir.y -= 1;
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             dir.x += 1;
             dir.y += 1;
         }

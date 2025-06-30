@@ -78,10 +78,17 @@ public class Main extends ApplicationAdapter {
 
         // render
         batch.setProjectionMatrix(camera.combined);
+        shapeRenderer.setProjectionMatrix(camera.combined);
 
         batch.begin();
+
         map.render(batch);
         entityManager.render(batch);
+        boolean showHitboxes = true; // ou false pour les cacher
+        if (showHitboxes) {
+            entityManager.renderHitboxes(batch, shapeRenderer);
+        }
+
         batch.end();
 
         renderMousePointer();

@@ -2,6 +2,7 @@ package com.terrescalmes.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.CameraManager;
@@ -55,6 +56,42 @@ public class Entity {
                 textureRegion,
                 screenBounds.x, screenBounds.y,
                 screenBounds.width, screenBounds.height);
+    }
+
+    public void renderHitbox(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+        // On arrête le batch pour dessiner les formes
+        batch.end();
+
+        // Récupère les coords jeu
+        float hx = hitbox.x;
+        float hy = hitbox.y;
+        float hw = hitbox.width;
+        float hh = hitbox.height;
+
+        // Les 4 coins en jeu
+        Vector2[] corners = new Vector2[] {
+                new Vector2(hx, hy), // BL
+                new Vector2(hx + hw, hy), // BR
+                new Vector2(hx + hw, hy + hh), // TR
+                new Vector2(hx, hy + hh) // TL
+        };
+
+        // Projette chacun
+        float[] verts = new float[8];
+        for (int i = 0; i < 4; i++) {
+            Vector2 s = CameraManager.gameToDisplayCoordinates(corners[i]);
+            verts[i * 2] = s.x;
+            verts[i * 2 + 1] = s.y;
+        }
+
+        // Dessine le polygone
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(1, 0, 0, 1);
+        shapeRenderer.polygon(verts);
+        shapeRenderer.end();
+
+        // On relance le batch
+        batch.begin();
     }
 
     public void takeDamage(int amount) {
