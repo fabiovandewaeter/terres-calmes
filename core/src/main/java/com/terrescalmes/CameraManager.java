@@ -57,4 +57,18 @@ public class CameraManager extends OrthographicCamera {
     public void update(boolean updateFrustum) {
         super.update(updateFrustum);
     }
+
+    public static Vector2 normalizeIsometric(Vector2 worldDir, float speed) {
+        // 1) direction projetée en pixels
+        Vector2 disp = gameToDisplayCoordinates(new Vector2(worldDir.x, worldDir.y));
+        // 2) vitesse désirée en pixels (on prend CUBE_WIDTH comme référence)
+        float desiredPixelSpeed = speed * CUBE_WIDTH;
+        float dispLen = disp.len();
+        if (dispLen == 0)
+            return new Vector2(0, 0);
+        // 3) facteur pour uniformiser en pixels
+        float factor = desiredPixelSpeed / dispLen;
+        // 4) on retourne la vraie translation en unités "monde"
+        return new Vector2(worldDir.x * factor, worldDir.y * factor);
+    }
 }

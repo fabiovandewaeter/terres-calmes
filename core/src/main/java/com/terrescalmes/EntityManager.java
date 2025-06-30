@@ -59,11 +59,6 @@ public class EntityManager {
             if (entity.isDead()) {
                 deadEntityIndexes.add(i);
             }
-            if (entity.hitbox.contains(1, 1)) {
-                System.out.println("touche");
-            } else {
-                System.out.println("NON");
-            }
         }
 
         for (Integer index : deadEntityIndexes) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.terrescalmes.CameraManager;
 
 public class Player extends Entity {
 
@@ -44,10 +45,14 @@ public class Player extends Entity {
         }
 
         if (dir.len() > 0) {
-            dir.nor(); // Normaliser pour avoir une longueur = 1
-            dir.scl(speed); // Appliquer la vitesse
+            // 1) on normalise “à l’écran” et on récupère la translation appropriée
+            Vector2 move = CameraManager.normalizeIsometric(dir, speed);
+            // 2) sprint ?
+            if (isSprinting)
+                move.scl(1.5f);
+
             Vector2 old = new Vector2(position.x, position.y);
-            position.add(dir); // Déplacer le joueur
+            position.add(move);
 
             // Limites de la carte (ajuster selon votre MAP_SIZE)
             if (position.x < 0) {
