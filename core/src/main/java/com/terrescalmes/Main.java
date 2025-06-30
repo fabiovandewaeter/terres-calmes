@@ -54,8 +54,9 @@ public class Main extends ApplicationAdapter {
         entityManager.update(delta);
         Player player = entityManager.getPlayer();
         if (player != null) {
-            camera.position.set(player.position.x * CameraManager.CUBE_WIDTH,
-                    player.position.y * CameraManager.CUBE_HEIGHT, 0);
+            // Conversion des coordonnées de jeu du joueur vers coordonnées d'affichage
+            Vector2 playerDisplayPos = CameraManager.gameToDisplayCoordinates(player.position);
+            camera.position.set(playerDisplayPos.x, playerDisplayPos.y, 0);
         } else {
             camera.position.set(0, 0, 0);
         }

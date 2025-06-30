@@ -17,32 +17,24 @@ public class CameraManager extends OrthographicCamera {
     }
 
     public static Vector2 gameToDisplayCoordinates(Vector2 gameCoordinates) {
-        float x = (gameCoordinates.x - gameCoordinates.y) * (CUBE_WIDTH / 2f) -
-                (CUBE_WIDTH / 2f);
-        float y = -((gameCoordinates.x + gameCoordinates.y) * (CUBE_HEIGHT / 4f)) -
-                CUBE_HEIGHT;
+        float x = (gameCoordinates.x - gameCoordinates.y) * (CUBE_WIDTH / 2f);
+        float y = -((gameCoordinates.x + gameCoordinates.y) * (CUBE_HEIGHT / 4f));
         return new Vector2(x, y);
     }
 
-    public static Vector2 displayToGameCoordinates(Vector2 disp) {
-        // décale pour annuler le -CUBE_WIDTH/2 et le -CUBE_HEIGHT de ta formule
-        // d'affichage
-        float dx = disp.x + CUBE_WIDTH / 2f;
-        float dy = -(disp.y + CUBE_HEIGHT);
+    public static Vector2 displayToGameCoordinates(Vector2 displayCoords) {
+        // Inverse de la transformation gameToDisplayCoordinates
+        float dx = displayCoords.x;
+        float dy = -displayCoords.y;
 
-        // on sait que :
+        // Résolution du système d'équations :
         // dx = (gx - gy) * (CUBE_WIDTH/2)
         // dy = (gx + gy) * (CUBE_HEIGHT/4)
-        // donc :
         float diff = dx / (CUBE_WIDTH / 2f); // gx - gy
         float sum = dy / (CUBE_HEIGHT / 4f); // gx + gy
 
-        float gx = (sum + diff) / 2;
-        float gy = (sum - diff) / 2;
-
-        // offset because we use top of cube and not all cube
-        gx += 1.5;
-        gy += 2.5;
+        float gx = (sum + diff) / 2f;
+        float gy = (sum - diff) / 2f;
 
         return new Vector2(gx, gy);
     }

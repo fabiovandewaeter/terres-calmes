@@ -66,7 +66,7 @@ public class TileMap {
                     textureRegion = textureManager.getTextureRegion("cubes", 5);
 
                     int num = r.nextInt(100);
-                    if (num > 90) {
+                    if (num > 190) {
                         objects.add(new Tile(textureManager.getTextureRegion("trees", 0, 0), new Vector2(x, y), true));
                     }
                 } else if (map[row][col].equals("w")) {

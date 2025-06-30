@@ -13,18 +13,29 @@ public class Player extends Entity {
 
     public void handleInputs(float delta) {
         Vector2 dir = new Vector2();
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+
+        // Déplacement isométrique : les touches correspondent aux directions à l'écran
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) { // Gauche à l'écran = -x +y dans le jeu
             dir.x -= 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            dir.x += 1;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             dir.y += 1;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) { // Droite à l'écran = +x -y dans le jeu
+            dir.x += 1;
             dir.y -= 1;
         }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) { // Haut à l'écran = +x +y dans le jeu
+            // dir.x += 1;
+            // dir.y += 1;
+            dir.x -= 1;
+            dir.y -= 1;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) { // Bas à l'écran = -x -y dans le jeu
+            // dir.x -= 1;
+            // dir.y -= 1;
+            dir.x += 1;
+            dir.y += 1;
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             isSprinting = true;
         } else {
@@ -37,9 +48,18 @@ public class Player extends Entity {
         }
 
         if (dir.len() > 0) {
-            dir.nor(); // longueur = 1
-            dir.scl(speed); // vitesse constante
-            position.add(dir); // on bouge le joueur
+            dir.nor(); // Normaliser pour avoir une longueur = 1
+            dir.scl(speed); // Appliquer la vitesse
+            Vector2 old = new Vector2(position.x, position.y);
+            position.add(dir); // Déplacer le joueur
+
+            // Limites de la carte (ajuster selon votre MAP_SIZE)
+            if (position.x < 0) {
+                position.x = old.x;
+            }
+            if (position.y < 0) {
+                position.y = old.y;
+            }
         }
     }
 }

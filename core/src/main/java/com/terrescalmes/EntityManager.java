@@ -37,7 +37,7 @@ public class EntityManager {
     public boolean handleClick(Vector2 world2) {
         for (Entity entity : entities) {
             if (entity.screenBounds.contains(world2)) {
-                entity.takeDamage(10);
+                entity.takeDamage(0);
                 return true;
             }
         }

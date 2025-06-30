@@ -26,7 +26,8 @@ public class Tile {
         if (aboveMap) {
             batch.draw(textureRegion, displayPosition.x, displayPosition.y + CameraManager.CUBE_HEIGHT / 2f);
         } else {
-            batch.draw(textureRegion, displayPosition.x, displayPosition.y);
+            batch.draw(textureRegion, displayPosition.x - CameraManager.CUBE_WIDTH / 2,
+                    displayPosition.y - CameraManager.CUBE_HEIGHT);
         }
     }
 }

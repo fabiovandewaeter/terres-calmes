@@ -11,7 +11,7 @@ public class Entity {
     protected static final float SIZE = 0.5f; // half a cube
 
     private TextureRegion textureRegion;
-    public Vector2 position;
+    public Vector2 position; // Position en coordonnées de jeu
     protected boolean isSprinting;
     protected int maxHP = 100;
     protected int HP;
@@ -24,22 +24,29 @@ public class Entity {
         this.isSprinting = false;
         this.maxHP = 100;
         this.HP = maxHP;
-        this.hitbox = new Rectangle(position.x - SIZE, position.y - SIZE, SIZE, SIZE);
+        this.hitbox = new Rectangle(position.x - SIZE / 2, position.y - SIZE / 2, SIZE, SIZE);
         this.screenBounds = new Rectangle();
         updateWorldBounds();
     }
 
     public void update(float delta) {
-        hitbox.setPosition(position.x - SIZE, position.y - SIZE);
+        hitbox.setPosition(position.x - SIZE / 2, position.y - SIZE / 2);
         updateWorldBounds();
     }
 
-    // calcul position of the sprite on the screen based on in-game position
+    // Calcul position de l'entité à l'écran basé sur sa position dans le jeu
     private void updateWorldBounds() {
-        float x = position.x * CameraManager.CUBE_WIDTH - (SIZE * CameraManager.CUBE_WIDTH) / 2f;
-        float y = position.y * CameraManager.CUBE_HEIGHT;
+        // Conversion des coordonnées de jeu vers coordonnées d'affichage
+        Vector2 displayPos = CameraManager.gameToDisplayCoordinates(position);
+
+        // Taille en pixels de l'entité
         float w = SIZE * CameraManager.CUBE_WIDTH;
         float h = SIZE * CameraManager.CUBE_HEIGHT;
+
+        // Centrage de l'entité sur sa position
+        float x = displayPos.x - w / 2f;
+        float y = displayPos.y - h / 2f;
+
         screenBounds.set(x, y, w, h);
     }
 
@@ -52,7 +59,6 @@ public class Entity {
 
     public void takeDamage(int amount) {
         HP = Math.max(0, HP - amount);
-        System.out.println("Damages taken: " + amount);
     }
 
     public boolean collide(Vector2 position) {
