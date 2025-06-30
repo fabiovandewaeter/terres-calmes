@@ -12,7 +12,7 @@ import com.terrescalmes.entities.Player;
 public class EntityManager {
     private static EntityManager instance;
 
-    private List<Entity> entities;
+    public List<Entity> entities;
     private Player player;
 
     private EntityManager() {
@@ -52,15 +52,38 @@ public class EntityManager {
     }
 
     public void update(float delta) {
-        ArrayList<Integer> deadEntityIndexes = new ArrayList<>();
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             entity.update(delta);
+        }
+        checkCollisions();
+        removeDeadEntities();
+    }
+
+    private void checkCollisions() {
+        // Version simple (à optimiser si besoin)
+        for (int i = 0; i < entities.size(); i++) {
+            Entity a = entities.get(i);
+
+            for (int j = i + 1; j < entities.size(); j++) {
+                Entity b = entities.get(j);
+
+                if (a.collide(b)) {
+                    a.handleCollision(b);
+                    b.handleCollision(a);
+                }
+            }
+        }
+    }
+
+    private void removeDeadEntities() {
+        ArrayList<Integer> deadEntityIndexes = new ArrayList<>();
+        for (int i = 0; i < entities.size(); i++) {
+            Entity entity = entities.get(i);
             if (entity.isDead()) {
                 deadEntityIndexes.add(i);
             }
         }
-
         for (Integer index : deadEntityIndexes) {
             entities.remove((int) index);
         }

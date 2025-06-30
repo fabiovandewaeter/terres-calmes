@@ -15,7 +15,7 @@ public class Entity {
     public Vector2 position; // Position en coordonnées de jeu
     protected boolean isSprinting;
     protected int maxHP = 100;
-    protected int HP;
+    public int HP;
     public Rectangle hitbox;
     public Rectangle screenBounds;
 
@@ -100,6 +100,14 @@ public class Entity {
 
     public boolean collide(Vector2 position) {
         return hitbox.contains(position);
+    }
+
+    public boolean collide(Entity other) {
+        return this.hitbox.overlaps(other.hitbox);
+    }
+
+    public void handleCollision(Entity other) {
+        // TODO
     }
 
     public boolean isDead() {

@@ -7,7 +7,7 @@ import com.terrescalmes.entities.Entity;
 public interface Attack {
     void execute(Entity source, Vector2 targetPos);
 
-    void update(float delta);
+    boolean update(float delta);
 
     void render(SpriteBatch batch);
 }

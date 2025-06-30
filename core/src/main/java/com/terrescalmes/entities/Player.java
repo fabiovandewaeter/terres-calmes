@@ -53,14 +53,6 @@ public class Player extends Entity {
 
             Vector2 old = new Vector2(position.x, position.y);
             position.add(move);
-
-            // Limites de la carte (ajuster selon votre MAP_SIZE)
-            if (position.x < 0) {
-                position.x = old.x;
-            }
-            if (position.y < 0) {
-                position.y = old.y;
-            }
         }
     }
 }
