@@ -37,15 +37,14 @@ public class Main extends ApplicationAdapter {
         map = new TileMap();
         entityManager = EntityManager.getInstance();
         Player player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                new Vector2(0, 0));
+                new Vector2(0, 0), 2);
         entityManager.add(player);
     }
 
     private void handleClick() {
         if (Gdx.input.justTouched()) {
             Vector2 world2 = CameraManager.getInstance().mouseCoordinates();
-            Vector2 target = CameraManager.getInstance().mouseToGameCoordinates();
-
+            // Vector2 target = CameraManager.getInstance().mouseToGameCoordinates();
             entityManager.handleClick(world2);
         }
     }
@@ -145,7 +144,8 @@ public class Main extends ApplicationAdapter {
             // Crée l’entité à cette position
             Entity entity = new Entity(
                     new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                    new Vector2(x, y));
+                    new Vector2(x, y), 2);
+            entity.faction = "Enemies";
             entityManager.add(entity);
         }
     }

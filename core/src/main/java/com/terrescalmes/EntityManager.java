@@ -59,6 +59,9 @@ public class EntityManager {
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             entity.update(delta);
+            if (entity.faction == "Enemies") {
+                entity.moveTo(player.position, delta);
+            }
         }
         checkCollisions();
         removeDeadEntities();

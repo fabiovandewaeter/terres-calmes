@@ -8,15 +8,15 @@ import com.terrescalmes.entities.Entity;
 public class RangedAttack implements Attack {
     private int damage;
     private float range;
-    // in ms
-    private int cooldown;
-    private float speed;
+    // in seconds
+    private float cooldown;
+    private float acceleration;
 
-    public RangedAttack(int damage, float range, int cooldown, float speed) {
+    public RangedAttack(int damage, float range, float cooldown, float acceleration) {
         this.damage = damage;
         this.range = range;
         this.cooldown = cooldown;
-        this.speed = speed;
+        this.acceleration = acceleration;
     }
 
     @Override
@@ -25,7 +25,7 @@ public class RangedAttack implements Attack {
                 null,
                 source.position.cpy(),
                 targetPos,
-                speed,
+                acceleration,
                 range,
                 damage,
                 source);

@@ -13,9 +13,9 @@ public class Player extends Entity {
 
     private float attackCooldown = 0f;
 
-    public Player(TextureRegion textureRegion, Vector2 position) {
-        super(textureRegion, position);
-        Attack rangedAttack = new RangedAttack(50, 20, HP, 10);
+    public Player(TextureRegion textureRegion, Vector2 position, float speed) {
+        super(textureRegion, position, speed);
+        Attack rangedAttack = new RangedAttack(50, 20, HP, 20);
         attacks.add(rangedAttack);
     }
 
@@ -48,15 +48,13 @@ public class Player extends Entity {
         }
 
         isSprinting = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
-        float speed = ACCELERATION * delta;
+        float speed = acceleration * delta;
         if (isSprinting) {
             speed *= 1.5;
         }
 
         if (dir.len() > 0) {
-            // 1) on normalise “à l’écran” et on récupère la translation appropriée
             Vector2 move = CameraManager.normalizeIsometric(dir, speed);
-            // 2) sprint ?
             if (isSprinting)
                 move.scl(1.5f);
 

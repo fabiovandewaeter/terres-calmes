@@ -92,6 +92,8 @@ public class CameraManager extends OrthographicCamera {
         super.update(updateFrustum);
     }
 
+    // make entity move faster in north/south axis so it moves at constant speed on
+    // screen
     public static Vector2 normalizeIsometric(Vector2 worldDir, float speed) {
         // 1) direction projetée en pixels
         Vector2 disp = gameToDisplayCoordinates(new Vector2(worldDir.x, worldDir.y));

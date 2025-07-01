@@ -6,17 +6,15 @@ import com.terrescalmes.entities.Entity;
 
 public class Projectile extends Entity {
     private final Vector2 target;
-    private final float speed;
     private final float range;
     private final Vector2 startPosition;
     private final int damage;
     private final Entity source;
 
-    public Projectile(TextureRegion textureRegion, Vector2 position, Vector2 target, float speed, float range,
+    public Projectile(TextureRegion textureRegion, Vector2 position, Vector2 target, float acceleration, float range,
             int damage, Entity source) {
-        super(textureRegion, position);
+        super(textureRegion, position, acceleration);
         this.target = target;
-        this.speed = speed;
         this.range = range;
         this.damage = damage;
         this.source = source;
@@ -28,18 +26,8 @@ public class Projectile extends Entity {
         if (HP <= 0)
             return; // Ne pas mettre à jour si le projectile est détruit
 
-        // Calculer la direction vers la cible
-        Vector2 direction = target.cpy().sub(position);
-        float distanceToTarget = direction.len();
-
-        // Vérifier si la cible est atteinte
-        if (distanceToTarget < speed * delta) {
-            position.set(target);
-            HP = 0; // Détruire le projectile
-        } else {
-            // Normaliser et déplacer
-            direction.nor().scl(speed * delta);
-            position.add(direction);
+        if (moveTo(target, delta)) {
+            HP = 0;
         }
 
         // Vérifier la portée maximale

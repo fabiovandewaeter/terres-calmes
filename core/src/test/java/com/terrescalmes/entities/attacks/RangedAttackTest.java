@@ -29,8 +29,8 @@ class RangedAttackTest {
         Vector2 target = new Vector2(5, 5);
 
         // create entity
-        Entity sourceEntity = new Entity(null, source);
-        Entity targetEntity = new Entity(null, target);
+        Entity sourceEntity = new Entity(null, source, 2f);
+        Entity targetEntity = new Entity(null, target, 2f);
         EntityManager entityManager = EntityManager.getInstance();
         // entityManager.add(sourceEntity);
         entityManager.add(targetEntity);

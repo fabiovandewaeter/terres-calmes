@@ -12,7 +12,6 @@ import com.terrescalmes.CameraManager;
 import com.terrescalmes.entities.attacks.Attack;
 
 public class Entity {
-    protected static final int ACCELERATION = 2;
     protected static final float SIZE = 0.5f; // half a cube
 
     private TextureRegion textureRegion;
@@ -23,8 +22,10 @@ public class Entity {
     public Rectangle hitbox;
     public Rectangle screenBounds;
     protected List<Attack> attacks;
+    protected float acceleration;
+    public String faction;
 
-    public Entity(TextureRegion textureRegion, Vector2 position) {
+    public Entity(TextureRegion textureRegion, Vector2 position, float acceleration) {
         this.textureRegion = textureRegion;
         this.position = position;
         this.isSprinting = false;
@@ -33,7 +34,14 @@ public class Entity {
         this.hitbox = new Rectangle(position.x - SIZE / 2, position.y - SIZE / 2, SIZE, SIZE);
         this.screenBounds = new Rectangle();
         this.attacks = new ArrayList<>();
+        this.acceleration = acceleration;
+        this.faction = "Player";
         updateWorldBounds();
+    }
+
+    public Entity(TextureRegion textureRegion, Vector2 position, float acceleration, String faction) {
+        this(textureRegion, position, acceleration);
+        this.faction = faction;
     }
 
     public void update(float delta) {
@@ -120,5 +128,24 @@ public class Entity {
 
     public boolean isDead() {
         return HP <= 0;
+    }
+
+    // returns true if reached target
+    public boolean moveTo(Vector2 target, float delta) {
+        // Calculer la direction vers la cible
+        Vector2 direction = target.cpy().sub(position);
+        float distanceToTarget = direction.len();
+
+        // Vérifier si la cible est atteinte
+        if (distanceToTarget < acceleration * delta) {
+            position.set(target);
+            return true;
+        } else {
+            // Normaliser et déplacer
+            direction.nor().scl(acceleration * delta);
+            position.add(direction);
+        }
+
+        return false;
     }
 }
