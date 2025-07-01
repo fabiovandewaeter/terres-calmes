@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 
 public class CameraManager extends OrthographicCamera {
     private static CameraManager instance;
@@ -22,6 +23,26 @@ public class CameraManager extends OrthographicCamera {
         float x = (gameCoordinates.x - gameCoordinates.y) * (CUBE_WIDTH / 2f);
         float y = -((gameCoordinates.x + gameCoordinates.y) * (CUBE_HEIGHT / 4f));
         return new Vector2(x, y);
+    }
+
+    // returns the coordinates the user see on screen ; useful when clic on the
+    // sprite of an entity
+    public Vector2 mouseCoordinates() {
+        int mouseX = Gdx.input.getX();
+        int mouseY = Gdx.input.getY();
+        Vector3 world3 = new Vector3(mouseX, mouseY, 0);
+        instance.unproject(world3);
+        return new Vector2(world3.x, world3.y);
+    }
+
+    // returns the in-game coordinates
+    public Vector2 mouseToGameCoordinates() {
+        int mouseX = Gdx.input.getX();
+        int mouseY = Gdx.input.getY();
+        Vector3 world3 = new Vector3(mouseX, mouseY, 0);
+        instance.unproject(world3);
+        Vector2 world2 = new Vector2(world3.x, world3.y);
+        return displayToGameCoordinates(world2);
     }
 
     public static CameraManager getInstance() {

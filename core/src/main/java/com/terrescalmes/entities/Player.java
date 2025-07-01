@@ -4,12 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.terrescalmes.CameraManager;
 import com.terrescalmes.entities.attacks.RangedAttack;
 import com.terrescalmes.entities.attacks.Attack;
 
 public class Player extends Entity {
+    private static final float ATTACK_INTERVAL = 0.2f;
+
+    private float attackCooldown = 0f;
 
     public Player(TextureRegion textureRegion, Vector2 position) {
         super(textureRegion, position);
@@ -38,22 +40,14 @@ public class Player extends Entity {
             dir.y += 1;
         }
 
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            isSprinting = true;
-        } else {
-            isSprinting = false;
-        }
-
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            int mouseX = Gdx.input.getX();
-            int mouseY = Gdx.input.getY();
-            Vector3 world3 = new Vector3(mouseX, mouseY, 0);
-            CameraManager.getInstance().unproject(world3);
-            Vector2 world2 = new Vector2(world3.x, world3.y);
-            Vector2 target = CameraManager.displayToGameCoordinates(world2); // coordinate on the map; to clic on tiles
+        attackCooldown = Math.max(0f, attackCooldown - delta);
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT) && attackCooldown <= 0f) {
+            Vector2 target = CameraManager.getInstance().mouseToGameCoordinates();
             attacks.get(0).execute(this, target);
+            attackCooldown = ATTACK_INTERVAL;
         }
 
+        isSprinting = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
         float speed = ACCELERATION * delta;
         if (isSprinting) {
             speed *= 1.5;
