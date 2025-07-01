@@ -1,22 +1,25 @@
 package com.terrescalmes.entities.attacks;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.EntityManager;
 import com.terrescalmes.entities.Entity;
+import com.terrescalmes.entities.attacks.effects.AttackEffect;
 
 public class RangedAttack implements Attack {
-    private int damage;
     private float range;
     // in seconds
     private float cooldown;
     private float acceleration;
+    private List<AttackEffect> hitEffects;
 
-    public RangedAttack(int damage, float range, float cooldown, float acceleration) {
-        this.damage = damage;
+    public RangedAttack(float range, float cooldown, float acceleration, List<AttackEffect> hitEffects) {
         this.range = range;
         this.cooldown = cooldown;
         this.acceleration = acceleration;
+        this.hitEffects = hitEffects;
     }
 
     @Override
@@ -27,8 +30,8 @@ public class RangedAttack implements Attack {
                 targetPos,
                 acceleration,
                 range,
-                damage,
-                source);
+                source,
+                hitEffects);
         EntityManager.getInstance().add(projectile);
     }
 

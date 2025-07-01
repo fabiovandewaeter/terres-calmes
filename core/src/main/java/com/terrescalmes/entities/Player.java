@@ -1,5 +1,8 @@
 package com.terrescalmes.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -7,6 +10,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.CameraManager;
 import com.terrescalmes.entities.attacks.RangedAttack;
 import com.terrescalmes.entities.attacks.Attack;
+import com.terrescalmes.entities.attacks.effects.AttackEffect;
+import com.terrescalmes.entities.attacks.effects.ExplosionEffect;
 
 public class Player extends Entity {
     private static final float ATTACK_INTERVAL = 0.2f;
@@ -15,7 +20,9 @@ public class Player extends Entity {
 
     public Player(TextureRegion textureRegion, Vector2 position, float speed) {
         super(textureRegion, position, speed);
-        Attack rangedAttack = new RangedAttack(50, 20, HP, 20);
+        List<AttackEffect> attackEffects = new ArrayList<>();
+        attackEffects.add(new ExplosionEffect(2f, 50));
+        Attack rangedAttack = new RangedAttack(20, ATTACK_INTERVAL, 2, attackEffects);
         attacks.add(rangedAttack);
     }
 

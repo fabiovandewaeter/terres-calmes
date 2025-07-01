@@ -1,24 +1,27 @@
 package com.terrescalmes.entities.attacks;
 
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
+import com.terrescalmes.entities.attacks.effects.AttackEffect;
 
 public class Projectile extends Entity {
     private final Vector2 target;
     private final float range;
     private final Vector2 startPosition;
-    private final int damage;
-    private final Entity source;
+    public final Entity source;
+    private List<AttackEffect> hitEffects;
 
     public Projectile(TextureRegion textureRegion, Vector2 position, Vector2 target, float acceleration, float range,
-            int damage, Entity source) {
+            Entity source, List<AttackEffect> hitEffects) {
         super(textureRegion, position, acceleration);
         this.target = target;
         this.range = range;
-        this.damage = damage;
         this.source = source;
-        this.startPosition = position.cpy(); // Position initiale pour le calcul de la distance
+        this.hitEffects = hitEffects;
+        startPosition = position.cpy(); // Position initiale pour le calcul de la distance
     }
 
     @Override
@@ -27,12 +30,16 @@ public class Projectile extends Entity {
             return; // Ne pas mettre à jour si le projectile est détruit
 
         if (moveTo(target, delta)) {
+            triggerHitEffects();
             HP = 0;
+            return;
         }
 
         // Vérifier la portée maximale
         if (position.dst(startPosition) > range) {
-            HP = 0; // Détruire si la portée est dépassée
+            triggerHitEffects();
+            HP = 0;
+            return;
         }
 
         super.update(delta); // Met à jour la hitbox
@@ -41,8 +48,17 @@ public class Projectile extends Entity {
     @Override
     public void handleCollision(Entity other) {
         if (other != source) { // Évite de toucher la source
-            other.takeDamage(damage);
+            triggerHitEffects();
             HP = 0; // Détruit le projectile après collision
+        }
+        if (other.isDead()) {
+            source.onKill(other);
+        }
+    }
+
+    private void triggerHitEffects() {
+        for (AttackEffect effect : hitEffects) {
+            effect.trigger(this, position);
         }
     }
 }

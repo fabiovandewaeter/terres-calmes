@@ -39,6 +39,11 @@ public class Main extends ApplicationAdapter {
         Player player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
                 new Vector2(0, 0), 2);
         entityManager.add(player);
+        Entity entity = new Entity(
+                new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
+                new Vector2(5, 5), 2);
+        entity.faction = "";
+        entityManager.add(entity);
     }
 
     private void handleClick() {
@@ -71,7 +76,7 @@ public class Main extends ApplicationAdapter {
         spawnTimer += delta;
         if (spawnTimer >= SPAWN_INTERVAL) {
             spawnTimer -= SPAWN_INTERVAL; // on décrémente plutôt que reset pour garder le surplus
-            spawnEntities(2, 5f); // ex. 5 entités dans un rayon de 5
+            // spawnEntities(2, 5f); // ex. 5 entités dans un rayon de 5
         }
     }
 

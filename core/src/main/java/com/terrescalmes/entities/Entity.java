@@ -24,18 +24,20 @@ public class Entity {
     protected List<Attack> attacks;
     protected float acceleration;
     public String faction;
+    protected int xp;
 
     public Entity(TextureRegion textureRegion, Vector2 position, float acceleration) {
         this.textureRegion = textureRegion;
         this.position = position;
-        this.isSprinting = false;
-        this.maxHP = 100;
-        this.HP = maxHP;
-        this.hitbox = new Rectangle(position.x - SIZE / 2, position.y - SIZE / 2, SIZE, SIZE);
-        this.screenBounds = new Rectangle();
-        this.attacks = new ArrayList<>();
         this.acceleration = acceleration;
-        this.faction = "Player";
+        isSprinting = false;
+        maxHP = 100;
+        HP = maxHP;
+        hitbox = new Rectangle(position.x - SIZE / 2, position.y - SIZE / 2, SIZE, SIZE);
+        screenBounds = new Rectangle();
+        attacks = new ArrayList<>();
+        faction = "Player";
+        xp = 0;
         updateWorldBounds();
     }
 
@@ -154,5 +156,14 @@ public class Entity {
             position.add(moveVector);
             return false;
         }
+    }
+
+    public void onKill(Entity victim) {
+        xp += victim.xpDrop();
+        System.out.println("Xp: " + xp);
+    }
+
+    public int xpDrop() {
+        return 100;
     }
 }

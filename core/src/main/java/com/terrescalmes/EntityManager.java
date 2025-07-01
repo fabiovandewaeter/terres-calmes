@@ -83,6 +83,18 @@ public class EntityManager {
         }
     }
 
+    public List<Entity> getEntitiesInRadius(Vector2 center, float radius) {
+        List<Entity> result = new ArrayList<>();
+        for (Entity entity : entities) {
+            if (entity.isDead())
+                continue;
+            if (entity.position.dst(center) <= radius) {
+                result.add(entity);
+            }
+        }
+        return result;
+    }
+
     private void removeDeadEntities() {
         ArrayList<Integer> deadEntityIndexes = new ArrayList<>();
         for (int i = 0; i < entities.size(); i++) {
