@@ -5,6 +5,9 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.entities.Player;
@@ -83,16 +86,23 @@ public class EntityManager {
         }
     }
 
-    public List<Entity> getEntitiesInRadius(Vector2 center, float radius) {
+    // returns the list of all entities that have part of their hitbox in the circle
+    public List<Entity> getEntitiesInCircle(Circle circle) {
         List<Entity> result = new ArrayList<>();
         for (Entity entity : entities) {
             if (entity.isDead())
                 continue;
-            if (entity.position.dst(center) <= radius) {
+
+            // Vérifie la collision cercle-rectangle
+            if (circleOverlapsRectangle(circle, entity.hitbox)) {
                 result.add(entity);
             }
         }
         return result;
+    }
+
+    private static boolean circleOverlapsRectangle(Circle circle, Rectangle rectangle) {
+        return Intersector.overlaps(circle, rectangle);
     }
 
     private void removeDeadEntities() {
@@ -124,5 +134,9 @@ public class EntityManager {
 
     public Player getPlayer() {
         return player;
+    }
+
+    public List<Entity> getEntities() {
+        return entities;
     }
 }

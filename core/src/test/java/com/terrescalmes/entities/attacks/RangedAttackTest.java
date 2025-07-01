@@ -57,9 +57,34 @@ class RangedAttackTest {
 
     @Test
     void attackDeletedWhenOutOfRange() {
-    }
+        // create attack
+        int damage = 10;
+        int cooldown = 1000;
+        float range = 20f;
+        float acceleration = 100f;
+        List<AttackEffect> attackEffects = new ArrayList<>();
+        attackEffects.add(new ExplosionEffect(2.5f, damage));
+        RangedAttack attack = new RangedAttack(range, cooldown, acceleration, attackEffects);
+        Vector2 sourceEntityPos = new Vector2(0, 0);
+        Vector2 targetEntityPos = new Vector2(50, 5);
 
-    @Test
-    void testCooldown() {
+        // create entity
+        Entity sourceEntity = new Entity(null, sourceEntityPos, 2f);
+        Entity targetEntity = new Entity(null, targetEntityPos, 2f);
+        EntityManager entityManager = EntityManager.getInstance();
+        // entityManager.add(sourceEntity);
+        entityManager.add(targetEntity);
+
+        int baseHP = targetEntity.HP;
+
+        // should have reached the target in less than 100 updates
+        attack.execute(sourceEntity, targetEntityPos);
+        for (int i = 0; i < 100; i++) {
+            entityManager.update(FIXED_DELTA);
+        }
+
+        int newHP = targetEntity.HP;
+
+        assertEquals(baseHP, newHP);
     }
 }

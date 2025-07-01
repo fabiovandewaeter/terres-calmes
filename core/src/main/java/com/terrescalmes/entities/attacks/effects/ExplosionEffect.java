@@ -2,6 +2,7 @@ package com.terrescalmes.entities.attacks.effects;
 
 import java.util.List;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.EntityManager;
 import com.terrescalmes.entities.Entity;
@@ -18,7 +19,8 @@ public class ExplosionEffect implements AttackEffect {
 
     @Override
     public void trigger(Projectile projectile, Vector2 position) {
-        List<Entity> entities = EntityManager.getInstance().getEntitiesInRadius(position, radius);
+        Circle explosionCircle = new Circle(position.x, position.y, radius);
+        List<Entity> entities = EntityManager.getInstance().getEntitiesInCircle(explosionCircle);
         for (Entity entity : entities) {
             if (!entity.equals(projectile.source) && !entity.equals(projectile)) {
                 entity.takeDamage(damage);
