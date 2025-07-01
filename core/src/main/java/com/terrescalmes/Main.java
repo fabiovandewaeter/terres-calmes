@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.terrescalmes.entities.Player;
+import com.terrescalmes.entities.Entity;
 import com.terrescalmes.map.TileMap;
 
 /**
@@ -27,12 +28,16 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         batch = new SpriteBatch();
-        camera = new CameraManager();
+        camera = CameraManager.getInstance();
         shapeRenderer = new ShapeRenderer();
         map = new TileMap();
         entityManager = EntityManager.getInstance();
-        entityManager.add(
-                new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612), new Vector2(0, 0)));
+        Player player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
+                new Vector2(0, 0));
+        Entity entity = new Entity(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
+                new Vector2(0, 0));
+        entityManager.add(player);
+        entityManager.add(entity);
     }
 
     private void handleClick() {

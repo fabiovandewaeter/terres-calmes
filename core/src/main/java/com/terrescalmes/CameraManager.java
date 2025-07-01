@@ -6,13 +6,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 public class CameraManager extends OrthographicCamera {
+    private static CameraManager instance;
+
     public static final int DISPLAY_WIDTH = 1920;
     public static final int DISPLAY_HEIGHT = 1080;
     public static final int CUBE_WIDTH = 256;
     public static final int CUBE_HEIGHT = 256;
     public static final int CUBE_FACE_HEIGHT = CUBE_HEIGHT / 2;
 
-    public CameraManager() {
+    private CameraManager() {
         super(DISPLAY_WIDTH, DISPLAY_HEIGHT);
     }
 
@@ -20,6 +22,17 @@ public class CameraManager extends OrthographicCamera {
         float x = (gameCoordinates.x - gameCoordinates.y) * (CUBE_WIDTH / 2f);
         float y = -((gameCoordinates.x + gameCoordinates.y) * (CUBE_HEIGHT / 4f));
         return new Vector2(x, y);
+    }
+
+    public static CameraManager getInstance() {
+        if (instance == null) {
+            instance = new CameraManager();
+        }
+        return instance;
+    }
+
+    public static void reset() {
+        instance = new CameraManager();
     }
 
     public static Vector2 displayToGameCoordinates(Vector2 displayCoords) {

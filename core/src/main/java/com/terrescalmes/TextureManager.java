@@ -37,6 +37,10 @@ public class TextureManager {
         return instance;
     }
 
+    public static void reset() {
+        instance = new TextureManager();
+    }
+
     private void loadTextures() {
         textureMap.put("tiles", new Texture("map/256x192_Tiles.png"));
         textureMap.put("cubes", new Texture("map/256x256_Cubes.png"));

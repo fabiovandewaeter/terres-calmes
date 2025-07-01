@@ -1,11 +1,15 @@
 package com.terrescalmes.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.CameraManager;
+import com.terrescalmes.entities.attacks.Attack;
 
 public class Entity {
     protected static final int ACCELERATION = 2;
@@ -18,6 +22,7 @@ public class Entity {
     public int HP;
     public Rectangle hitbox;
     public Rectangle screenBounds;
+    protected List<Attack> attacks;
 
     public Entity(TextureRegion textureRegion, Vector2 position) {
         this.textureRegion = textureRegion;
@@ -27,6 +32,7 @@ public class Entity {
         this.HP = maxHP;
         this.hitbox = new Rectangle(position.x - SIZE / 2, position.y - SIZE / 2, SIZE, SIZE);
         this.screenBounds = new Rectangle();
+        this.attacks = new ArrayList<>();
         updateWorldBounds();
     }
 
@@ -52,10 +58,12 @@ public class Entity {
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(
-                textureRegion,
-                screenBounds.x, screenBounds.y,
-                screenBounds.width, screenBounds.height);
+        if (textureRegion != null) {
+            batch.draw(
+                    textureRegion,
+                    screenBounds.x, screenBounds.y,
+                    screenBounds.width, screenBounds.height);
+        }
     }
 
     public void renderHitbox(SpriteBatch batch, ShapeRenderer shapeRenderer) {

@@ -26,6 +26,10 @@ public class EntityManager {
         return instance;
     }
 
+    public static void reset() {
+        instance = new EntityManager();
+    }
+
     public void add(Entity entity) {
         entities.add(entity);
     }
@@ -84,8 +88,10 @@ public class EntityManager {
                 deadEntityIndexes.add(i);
             }
         }
-        for (Integer index : deadEntityIndexes) {
-            entities.remove((int) index);
+        // remove entities backward because indexes changes when using .remove()
+        for (int i = deadEntityIndexes.size() - 1; i >= 0; i--) {
+            int index = deadEntityIndexes.get(i);
+            entities.remove(index);
         }
     }
 

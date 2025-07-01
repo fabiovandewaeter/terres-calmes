@@ -4,12 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.terrescalmes.CameraManager;
+import com.terrescalmes.entities.attacks.RangedAttack;
+import com.terrescalmes.entities.attacks.Attack;
 
 public class Player extends Entity {
 
     public Player(TextureRegion textureRegion, Vector2 position) {
         super(textureRegion, position);
+        Attack rangedAttack = new RangedAttack(50, 20, HP, 10);
+        attacks.add(rangedAttack);
     }
 
     public void handleInputs(float delta) {
@@ -37,6 +42,16 @@ public class Player extends Entity {
             isSprinting = true;
         } else {
             isSprinting = false;
+        }
+
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            int mouseX = Gdx.input.getX();
+            int mouseY = Gdx.input.getY();
+            Vector3 world3 = new Vector3(mouseX, mouseY, 0);
+            CameraManager.getInstance().unproject(world3);
+            Vector2 world2 = new Vector2(world3.x, world3.y);
+            Vector2 target = CameraManager.displayToGameCoordinates(world2); // coordinate on the map; to clic on tiles
+            attacks.get(0).execute(this, target);
         }
 
         float speed = ACCELERATION * delta;
