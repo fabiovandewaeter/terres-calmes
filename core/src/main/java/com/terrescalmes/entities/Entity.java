@@ -132,20 +132,27 @@ public class Entity {
 
     // returns true if reached target
     public boolean moveTo(Vector2 target, float delta) {
-        // Calculer la direction vers la cible
         Vector2 direction = target.cpy().sub(position);
         float distanceToTarget = direction.len();
 
-        // Vérifier si la cible est atteinte
-        if (distanceToTarget < acceleration * delta) {
+        if (distanceToTarget == 0) {
+            return true;
+        }
+
+        // Utilisation de la normalisation isométrique
+        Vector2 moveVector = CameraManager.normalizeIsometric(direction, acceleration * delta);
+        float moveLength = moveVector.len();
+
+        if (moveLength == 0) {
+            return false; // Aucun déplacement nécessaire
+        }
+
+        if (moveLength >= distanceToTarget) {
             position.set(target);
             return true;
         } else {
-            // Normaliser et déplacer
-            direction.nor().scl(acceleration * delta);
-            position.add(direction);
+            position.add(moveVector);
+            return false;
         }
-
-        return false;
     }
 }
