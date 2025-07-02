@@ -24,8 +24,6 @@ public class Tile {
 
     public void render(SpriteBatch batch) {
         if (aboveMap) {
-            // batch.draw(textureRegion, displayPosition.x, displayPosition.y +
-            // CameraManager.CUBE_HEIGHT / 1f);
             batch.draw(textureRegion, displayPosition.x - CameraManager.CUBE_WIDTH / 2,
                     displayPosition.y - CameraManager.CUBE_HEIGHT / 2f, CameraManager.CUBE_WIDTH,
                     CameraManager.CUBE_HEIGHT);

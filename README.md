@@ -36,6 +36,7 @@ For example, `core:clean` removes `build` folder only from the `core` project.
 ## Assets Credits
 
 - https://silivar.itch.io/isometric-asset-pack-peaceful
+- https://xilurus.itch.io/isometric-village
 
 ## Commandes
 

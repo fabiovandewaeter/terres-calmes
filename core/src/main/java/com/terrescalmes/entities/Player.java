@@ -69,8 +69,6 @@ public class Player extends Entity {
             Vector2 move = CameraManager.normalizeIsometric(dir, speed);
             if (isSprinting)
                 move.scl(1.5f);
-
-            Vector2 old = new Vector2(position.x, position.y);
             position.add(move);
         }
     }

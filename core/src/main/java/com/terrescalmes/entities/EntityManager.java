@@ -40,6 +40,7 @@ public class EntityManager {
         entities.add(player);
     }
 
+    // takes mouse coordinates
     public boolean handleClick(Vector2 world2) {
         for (Entity entity : entities) {
             if (entity.getScreenBounds().contains(world2)) {
