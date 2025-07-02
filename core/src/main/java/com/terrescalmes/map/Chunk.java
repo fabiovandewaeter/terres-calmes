@@ -24,7 +24,7 @@ public class Chunk {
         generateTiles();
         if (position.x == 0 && position.y == 0) {
             structures.add(
-                    new Structure(TextureManager.getInstance().getTextureRegion("buildings", 0, 0), new Vector2(0, 0)));
+                    new Structure(TextureManager.getInstance().getTextureRegion("buildings", 0, 0), new Vector2(0, 5)));
         }
     }
 

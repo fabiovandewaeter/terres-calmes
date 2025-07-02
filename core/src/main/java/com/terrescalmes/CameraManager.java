@@ -21,6 +21,13 @@ public class CameraManager extends OrthographicCamera {
         zoom *= 1.5;
     }
 
+    public static CameraManager getInstance() {
+        if (instance == null) {
+            instance = new CameraManager();
+        }
+        return instance;
+    }
+
     public static Vector2 gameToDisplayCoordinates(Vector2 gameCoordinates) {
         float x = (gameCoordinates.x - gameCoordinates.y) * (CUBE_WIDTH / 2f);
         float y = -((gameCoordinates.x + gameCoordinates.y) * (CUBE_HEIGHT / 4f));
@@ -39,19 +46,8 @@ public class CameraManager extends OrthographicCamera {
 
     // returns the in-game coordinates
     public Vector2 mouseToGameCoordinates() {
-        int mouseX = Gdx.input.getX();
-        int mouseY = Gdx.input.getY();
-        Vector3 world3 = new Vector3(mouseX, mouseY, 0);
-        instance.unproject(world3);
-        Vector2 world2 = new Vector2(world3.x, world3.y);
+        Vector2 world2 = mouseCoordinates();
         return displayToGameCoordinates(world2);
-    }
-
-    public static CameraManager getInstance() {
-        if (instance == null) {
-            instance = new CameraManager();
-        }
-        return instance;
     }
 
     public static void reset() {

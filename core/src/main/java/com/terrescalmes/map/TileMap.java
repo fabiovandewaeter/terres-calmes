@@ -25,4 +25,27 @@ public class TileMap {
         Chunk chunk = new Chunk(pos);
         chunks.put(pos, chunk);
     }
+
+    // getters
+    public Map<Vector2, Chunk> getChunks() {
+        return chunks;
+    }
+
+    public Chunk getChunkAt(Vector2 position) {
+        return chunks.get(position);
+    }
+
+    public java.util.List<Structure> getStructuresInRadius(Vector2 center, float radius) {
+        java.util.List<Structure> nearbyStructures = new java.util.ArrayList<>();
+
+        for (Chunk chunk : chunks.values()) {
+            for (Structure structure : chunk.getStructures()) {
+                if (center.dst(structure.getPosition()) <= radius) {
+                    nearbyStructures.add(structure);
+                }
+            }
+        }
+
+        return nearbyStructures;
+    }
 }

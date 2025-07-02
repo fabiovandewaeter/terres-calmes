@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.CameraManager;
+import com.terrescalmes.CollisionManager;
 import com.terrescalmes.entities.attacks.RangedAttack;
 import com.terrescalmes.entities.attacks.Attack;
 import com.terrescalmes.entities.attacks.effects.AttackEffect;
@@ -69,7 +70,16 @@ public class Player extends Entity {
             Vector2 move = CameraManager.normalizeIsometric(dir, speed);
             if (isSprinting)
                 move.scl(1.5f);
-            position.add(move);
+
+            Vector2 potentialDestination = position.cpy().add(move);
+
+            // Utiliser le système de glissement au lieu du simple allowMove
+            Vector2 newPosition = CollisionManager.getInstance().calculateSlideMovement(this, potentialDestination);
+
+            // Mettre à jour la position seulement si elle a changé
+            if (!newPosition.equals(position)) {
+                position.set(newPosition);
+            }
         }
     }
 }

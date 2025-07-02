@@ -33,6 +33,7 @@ public class Main extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         map = new TileMap();
         entityManager = EntityManager.getInstance();
+        CollisionManager.getInstance().setTileMap(map);
         addEntities();
     }
 

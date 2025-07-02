@@ -9,10 +9,11 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.CameraManager;
+import com.terrescalmes.CollisionManager;
 import com.terrescalmes.entities.attacks.Attack;
 
 public class Entity {
-    protected static final float SIZE = 0.5f; // half a cube
+    public static final float SIZE = 0.5f; // half a cube
 
     private TextureRegion textureRegion;
     protected Vector2 position; // Position en coordonnées de jeu
@@ -149,13 +150,26 @@ public class Entity {
             return false; // Aucun déplacement nécessaire
         }
 
+        Vector2 targetPosition;
+        boolean reachedTarget = false;
+
         if (moveLength >= distanceToTarget) {
-            position.set(target);
-            return true;
+            targetPosition = target.cpy();
+            reachedTarget = true;
         } else {
-            position.add(moveVector);
-            return false;
+            targetPosition = position.cpy().add(moveVector);
         }
+
+        // Utiliser le système de glissement pour calculer la nouvelle position
+        Vector2 newPosition = CollisionManager.getInstance().calculateSlideMovement(this, targetPosition);
+
+        // Mettre à jour la position seulement si elle a changé
+        if (!newPosition.equals(position)) {
+            position.set(newPosition);
+        }
+
+        // Retourner true seulement si on a atteint exactement la cible
+        return reachedTarget && position.equals(target);
     }
 
     public void onKill(Entity victim) {
