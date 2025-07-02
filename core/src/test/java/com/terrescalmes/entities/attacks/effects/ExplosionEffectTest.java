@@ -37,7 +37,7 @@ class ExplosionEffectTest {
 
         // create entity
         Entity sourceEntity = new Entity(null, sourceEntityPos, 2f);
-        Entity targetEntity = new Entity(null, targetEntityPos, 2f);
+        Entity targetEntity = new Entity(null, targetEntityPos, 2f, "Enemies");
         EntityManager entityManager = EntityManager.getInstance();
         entityManager.add(sourceEntity);
         entityManager.add(targetEntity);
@@ -70,8 +70,8 @@ class ExplosionEffectTest {
 
         // create entity
         Entity sourceEntity = new Entity(null, sourceEntityPos, 2f);
-        Entity targetEntity1 = new Entity(null, targetEntityPos1, 2f);
-        Entity targetEntity2 = new Entity(null, targetEntityPos2, 2f);
+        Entity targetEntity1 = new Entity(null, targetEntityPos1, 2f, "Enemies");
+        Entity targetEntity2 = new Entity(null, targetEntityPos2, 2f, "Enemies");
         EntityManager entityManager = EntityManager.getInstance();
         entityManager.add(sourceEntity);
         entityManager.add(targetEntity1);
@@ -105,8 +105,8 @@ class ExplosionEffectTest {
 
         // create entity
         Entity sourceEntity = new Entity(null, sourceEntityPos, 2f);
-        Entity targetEntity1 = new Entity(null, targetEntityPos1, 2f);
-        Entity targetEntity2 = new Entity(null, targetEntityPos2, 2f);
+        Entity targetEntity1 = new Entity(null, targetEntityPos1, 2f, "Enemies");
+        Entity targetEntity2 = new Entity(null, targetEntityPos2, 2f, "Enemies");
         EntityManager entityManager = EntityManager.getInstance();
         entityManager.add(sourceEntity);
         entityManager.add(targetEntity1);

@@ -37,9 +37,9 @@ class RangedAttackTest {
 
         // create entity
         Entity sourceEntity = new Entity(null, sourceEntityPos, 2f);
-        Entity targetEntity = new Entity(null, targetEntityPos, 2f);
+        Entity targetEntity = new Entity(null, targetEntityPos, 2f, "Enemies");
         EntityManager entityManager = EntityManager.getInstance();
-        // entityManager.add(sourceEntity);
+        entityManager.add(sourceEntity);
         entityManager.add(targetEntity);
 
         int baseHP = targetEntity.getHP();
@@ -70,7 +70,7 @@ class RangedAttackTest {
 
         // create entity
         Entity sourceEntity = new Entity(null, sourceEntityPos, 2f);
-        Entity targetEntity = new Entity(null, targetEntityPos, 2f);
+        Entity targetEntity = new Entity(null, targetEntityPos, 2f, "Enemies");
         EntityManager entityManager = EntityManager.getInstance();
         // entityManager.add(sourceEntity);
         entityManager.add(targetEntity);

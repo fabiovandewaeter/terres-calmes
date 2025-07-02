@@ -62,7 +62,9 @@ public class EntityManager {
             Entity entity = entities.get(i);
             entity.update(delta);
             if (entity.getFaction().equals("Enemies")) {
-                entity.moveTo(player.getPosition(), delta);
+                if (player != null) {
+                    entity.moveTo(player.getPosition(), delta);
+                }
             }
         }
         checkCollisions();
