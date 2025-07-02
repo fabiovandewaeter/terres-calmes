@@ -18,6 +18,7 @@ public class CameraManager extends OrthographicCamera {
 
     private CameraManager() {
         super(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+        zoom *= 1.5;
     }
 
     public static Vector2 gameToDisplayCoordinates(Vector2 gameCoordinates) {

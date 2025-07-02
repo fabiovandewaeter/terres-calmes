@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 public class TileMap {
-
     private Map<Vector2, Chunk> chunks;
 
     public TileMap() {
-        // base = new LinkedList<Tile>();
         chunks = new HashMap<>();
         generateChunks();
     }

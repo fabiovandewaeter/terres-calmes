@@ -22,6 +22,10 @@ public class Chunk {
         tiles = new Tile[CHUNK_SIZE * CHUNK_SIZE];
         structures = new ArrayList<>();
         generateTiles();
+        if (position.x == 0 && position.y == 0) {
+            structures.add(
+                    new Structure(TextureManager.getInstance().getTextureRegion("buildings", 0, 0), new Vector2(0, 0)));
+        }
     }
 
     private void generateTiles() {
@@ -35,19 +39,14 @@ public class Chunk {
 
                 textureRegion = textureManager.getTextureRegion("cubes", 5);
                 addFromLocalCoordinates(new Tile(textureRegion, new Vector2(x, y)), (int) x, (int) y);
-                structures.add(new Structure(textureManager.getTextureRegion("buildings", 0, 0), new Vector2(x, y)));
             }
         }
     }
 
     public void render(SpriteBatch batch) {
-        // for (int i = CHUNK_SIZE * CHUNK_SIZE - 1; i >= 0; i--) {
         for (int i = 0; i < CHUNK_SIZE * CHUNK_SIZE; i++) {
             tiles[i].render(batch);
         }
-        // for (Structure structure : this.structures) {
-        // structure.render(batch);
-        // }
         ListIterator<Structure> it = structures.listIterator(structures.size());
         while (it.hasPrevious()) {
             Structure element = it.previous();
