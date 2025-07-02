@@ -104,6 +104,19 @@ public class EntityManager {
         return Intersector.overlaps(circle, rectangle);
     }
 
+    public Entity getEntityAt(float x, float y) {
+        Vector2 point = new Vector2(x, y);
+        for (Entity entity : entities) {
+            if (entity.isDead()) {
+                continue;
+            }
+            if (entity.getHitbox().contains(point)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
     private void removeDeadEntities() {
         ArrayList<Integer> deadEntityIndexes = new ArrayList<>();
         for (int i = 0; i < entities.size(); i++) {

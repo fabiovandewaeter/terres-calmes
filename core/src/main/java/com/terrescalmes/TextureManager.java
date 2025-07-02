@@ -13,8 +13,6 @@ public class TextureManager {
 
     // texture name -> Texture
     private Map<String, Texture> textureMap;
-    // TextureRegion name -> TextureRegion
-    private Map<String, TextureRegion> textureRegionMap;
     // texture name -> list of TextureRegion
     private Map<String, List<TextureRegion>> textureListMap;
     // texture name -> nb of columns in the texture
@@ -22,7 +20,6 @@ public class TextureManager {
 
     private TextureManager() {
         textureMap = new HashMap<>();
-        textureRegionMap = new HashMap<>();
         textureListMap = new HashMap<>();
         nbColumnsMap = new HashMap<>();
 

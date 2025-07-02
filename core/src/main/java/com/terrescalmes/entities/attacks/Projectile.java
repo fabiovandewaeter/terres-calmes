@@ -58,7 +58,7 @@ public class Projectile extends Entity {
 
     private void triggerHitEffects() {
         for (AttackEffect effect : hitEffects) {
-            effect.trigger(this, position);
+            effect.trigger(source, position);
         }
     }
 }

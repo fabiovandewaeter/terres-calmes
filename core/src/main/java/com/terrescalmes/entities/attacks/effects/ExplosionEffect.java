@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.entities.EntityManager;
-import com.terrescalmes.entities.attacks.Projectile;
 
 public class ExplosionEffect implements AttackEffect {
     private float radius;
@@ -18,12 +17,15 @@ public class ExplosionEffect implements AttackEffect {
     }
 
     @Override
-    public void trigger(Projectile projectile, Vector2 position) {
+    public void trigger(Entity source, Vector2 position) {
         Circle explosionCircle = new Circle(position.x, position.y, radius);
         List<Entity> entities = EntityManager.getInstance().getEntitiesInCircle(explosionCircle);
         for (Entity entity : entities) {
-            if (!entity.equals(projectile.source) && !entity.equals(projectile)) {
+            if (!entity.equals(source) && !entity.getFaction().equals(source.getFaction())) {
                 entity.takeDamage(damage);
+                if (entity.isDead()) {
+                    source.onKill(entity);
+                }
             }
         }
     }
