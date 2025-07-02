@@ -71,6 +71,9 @@ public class TileMap {
                     }
                 } else if (map[row][col].equals("w")) {
                     textureRegion = textureManager.getTextureRegion("cubes", 0, 3);
+                } else if (map[row][col].equals("b")) {
+                    textureRegion = textureManager.getTextureRegion("cubes", 5);
+                    objects.add(new Tile(textureManager.getTextureRegion("buildings", 0, 0), new Vector2(x, y), true));
                 }
                 base.add(new Tile(textureRegion, new Vector2(x, y)));
             }

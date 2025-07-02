@@ -20,6 +20,11 @@ public class Player extends Entity {
 
     public Player(TextureRegion textureRegion, Vector2 position, float speed) {
         super(textureRegion, position, speed);
+        faction = "Player";
+        fillAttacks();
+    }
+
+    private void fillAttacks() {
         List<AttackEffect> attackEffects = new ArrayList<>();
         attackEffects.add(new ExplosionEffect(2f, 50));
         Attack rangedAttack = new RangedAttack(20, ATTACK_INTERVAL, 2, attackEffects);

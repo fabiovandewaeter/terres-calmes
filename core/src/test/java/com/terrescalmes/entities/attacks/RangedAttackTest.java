@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector2;
-import com.terrescalmes.EntityManager;
 import com.terrescalmes.entities.Entity;
+import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.entities.attacks.effects.AttackEffect;
 import com.terrescalmes.entities.attacks.effects.ExplosionEffect;
 
@@ -42,7 +42,7 @@ class RangedAttackTest {
         // entityManager.add(sourceEntity);
         entityManager.add(targetEntity);
 
-        int baseHP = targetEntity.HP;
+        int baseHP = targetEntity.getHP();
 
         // should have reached the target in less than 100 updates
         attack.execute(sourceEntity, targetEntityPos);
@@ -50,7 +50,7 @@ class RangedAttackTest {
             entityManager.update(FIXED_DELTA);
         }
 
-        int newHP = targetEntity.HP;
+        int newHP = targetEntity.getHP();
 
         assertEquals(baseHP - damage, newHP);
     }
@@ -75,7 +75,7 @@ class RangedAttackTest {
         // entityManager.add(sourceEntity);
         entityManager.add(targetEntity);
 
-        int baseHP = targetEntity.HP;
+        int baseHP = targetEntity.getHP();
 
         // should have reached the target in less than 100 updates
         attack.execute(sourceEntity, targetEntityPos);
@@ -83,7 +83,7 @@ class RangedAttackTest {
             entityManager.update(FIXED_DELTA);
         }
 
-        int newHP = targetEntity.HP;
+        int newHP = targetEntity.getHP();
 
         assertEquals(baseHP, newHP);
     }

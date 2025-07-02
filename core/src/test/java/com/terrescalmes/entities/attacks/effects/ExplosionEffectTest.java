@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.badlogic.gdx.math.Vector2;
-import com.terrescalmes.EntityManager;
 import com.terrescalmes.entities.Entity;
+import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.entities.attacks.RangedAttack;
 
 class ExplosionEffectTest {

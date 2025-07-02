@@ -13,12 +13,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.terrescalmes.entities.Player;
 import com.terrescalmes.entities.Entity;
+import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.map.TileMap;
 
-/**
- * {@link com.badlogic.gdx.ApplicationListener} implementation shared by all
- * platforms.
- */
 public class Main extends ApplicationAdapter {
     private static final float SPAWN_INTERVAL = 2f;
 
@@ -36,13 +33,16 @@ public class Main extends ApplicationAdapter {
         shapeRenderer = new ShapeRenderer();
         map = new TileMap();
         entityManager = EntityManager.getInstance();
+        addEntities();
+    }
+
+    private void addEntities() {
         Player player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
                 new Vector2(0, 0), 2);
         entityManager.add(player);
         Entity entity = new Entity(
                 new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
                 new Vector2(5, 5), 2);
-        entity.faction = "";
         entityManager.add(entity);
     }
 
@@ -62,14 +62,7 @@ public class Main extends ApplicationAdapter {
 
     private void update(float delta) {
         entityManager.update(delta);
-        Player player = entityManager.getPlayer();
-        if (player != null) {
-            // Conversion des coordonnées de jeu du joueur vers coordonnées d'affichage
-            Vector2 playerDisplayPos = CameraManager.gameToDisplayCoordinates(player.position);
-            camera.position.set(playerDisplayPos.x, playerDisplayPos.y, 0);
-        } else {
-            camera.position.set(0, 0, 0);
-        }
+
         camera.update();
 
         // spawn random entities
@@ -136,7 +129,7 @@ public class Main extends ApplicationAdapter {
         if (player == null)
             return; // pas de joueur, pas de spawn
 
-        Vector2 center = player.position;
+        Vector2 center = player.getPosition();
         for (int i = 0; i < count; i++) {
             // angle aléatoire en radians
             float angle = MathUtils.random(0f, MathUtils.PI2);
@@ -149,8 +142,7 @@ public class Main extends ApplicationAdapter {
             // Crée l’entité à cette position
             Entity entity = new Entity(
                     new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                    new Vector2(x, y), 2);
-            entity.faction = "Enemies";
+                    new Vector2(x, y), 2, "Enemies");
             entityManager.add(entity);
         }
     }

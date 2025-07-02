@@ -1,4 +1,4 @@
-package com.terrescalmes;
+package com.terrescalmes.entities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +9,6 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.terrescalmes.entities.Entity;
-import com.terrescalmes.entities.Player;
 
 public class EntityManager {
     private static EntityManager instance;
@@ -44,7 +42,7 @@ public class EntityManager {
 
     public boolean handleClick(Vector2 world2) {
         for (Entity entity : entities) {
-            if (entity.screenBounds.contains(world2)) {
+            if (entity.getScreenBounds().contains(world2)) {
                 entity.takeDamage(0);
                 return true;
             }
@@ -62,8 +60,8 @@ public class EntityManager {
         for (int i = 0; i < entities.size(); i++) {
             Entity entity = entities.get(i);
             entity.update(delta);
-            if (entity.faction.equals("Enemies")) {
-                entity.moveTo(player.position, delta);
+            if (entity.getFaction().equals("Enemies")) {
+                entity.moveTo(player.getPosition(), delta);
             }
         }
         checkCollisions();
@@ -94,7 +92,7 @@ public class EntityManager {
                 continue;
 
             // Vérifie la collision cercle-rectangle
-            if (circleOverlapsRectangle(circle, entity.hitbox)) {
+            if (circleOverlapsRectangle(circle, entity.getHitbox())) {
                 result.add(entity);
             }
         }

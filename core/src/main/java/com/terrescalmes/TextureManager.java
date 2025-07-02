@@ -45,6 +45,7 @@ public class TextureManager {
         textureMap.put("tiles", new Texture("map/256x192_Tiles.png"));
         textureMap.put("cubes", new Texture("map/256x256_Cubes.png"));
         textureMap.put("trees", new Texture("map/256x512_Trees.png"));
+        textureMap.put("buildings", new Texture("map/buildings/Isometric_Assets_3.png"));
     }
 
     private void fillTextureRegionMap() {
@@ -53,16 +54,24 @@ public class TextureManager {
     private void fillTextureList() {
         // tiles
         int nbColumns = 10;
-        textureListMap.put("tiles", createTextureRegions(textureMap.get("tiles"), nbColumns, 9, 256, 192));
-        nbColumnsMap.put("tiles", nbColumns);
+        String name = "tiles";
+        textureListMap.put(name, createTextureRegions(textureMap.get(name), nbColumns, 9, 256, 192));
+        nbColumnsMap.put(name, nbColumns);
         // cubes
         nbColumns = 10;
-        textureListMap.put("cubes", createTextureRegions(textureMap.get("cubes"), nbColumns, 6, 256, 256));
-        nbColumnsMap.put("cubes", nbColumns);
+        name = "cubes";
+        textureListMap.put(name, createTextureRegions(textureMap.get(name), nbColumns, 6, 256, 256));
+        nbColumnsMap.put(name, nbColumns);
         // trees
         nbColumns = 6;
-        textureListMap.put("trees", createTextureRegions(textureMap.get("trees"), nbColumns, 2, 256, 512));
-        nbColumnsMap.put("trees", nbColumns);
+        name = "trees";
+        textureListMap.put(name, createTextureRegions(textureMap.get(name), nbColumns, 2, 256, 512));
+        nbColumnsMap.put(name, nbColumns);
+        // buildings
+        nbColumns = 2;
+        name = "buildings";
+        textureListMap.put(name, createTextureRegions(textureMap.get(name), nbColumns, 2, 1050, 1050));
+        nbColumnsMap.put(name, nbColumns);
     }
 
     private List<TextureRegion> createTextureRegions(Texture texture, int nbColumns, int nbRows, int elementWidth,

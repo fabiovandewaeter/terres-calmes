@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.terrescalmes.EntityManager;
 import com.terrescalmes.entities.Entity;
+import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.entities.attacks.effects.AttackEffect;
 
 public class RangedAttack implements Attack {
@@ -26,7 +26,7 @@ public class RangedAttack implements Attack {
     public void execute(Entity source, Vector2 targetPos) {
         Projectile projectile = new Projectile(
                 null,
-                source.position.cpy(),
+                source.getPosition().cpy(),
                 targetPos,
                 acceleration,
                 range,

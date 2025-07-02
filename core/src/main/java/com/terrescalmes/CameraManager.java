@@ -5,6 +5,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.terrescalmes.entities.EntityManager;
+import com.terrescalmes.entities.Player;
 
 public class CameraManager extends OrthographicCamera {
     private static CameraManager instance;
@@ -13,7 +15,6 @@ public class CameraManager extends OrthographicCamera {
     public static final int DISPLAY_HEIGHT = 1080;
     public static final int CUBE_WIDTH = 256;
     public static final int CUBE_HEIGHT = 256;
-    public static final int CUBE_FACE_HEIGHT = CUBE_HEIGHT / 2;
 
     private CameraManager() {
         super(DISPLAY_WIDTH, DISPLAY_HEIGHT);
@@ -84,6 +85,12 @@ public class CameraManager extends OrthographicCamera {
 
     @Override
     public void update() {
+        Player player = EntityManager.getInstance().getPlayer();
+        if (player != null) {
+            // Conversion des coordonnées de jeu du joueur vers coordonnées d'affichage
+            Vector2 playerDisplayPos = CameraManager.gameToDisplayCoordinates(player.getPosition());
+            position.set(playerDisplayPos.x, playerDisplayPos.y, 0);
+        }
         super.update();
     }
 

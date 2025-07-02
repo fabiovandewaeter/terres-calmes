@@ -15,15 +15,15 @@ public class Entity {
     protected static final float SIZE = 0.5f; // half a cube
 
     private TextureRegion textureRegion;
-    public Vector2 position; // Position en coordonnées de jeu
+    protected Vector2 position; // Position en coordonnées de jeu
     protected boolean isSprinting;
     protected int maxHP = 100;
-    public int HP;
-    public Rectangle hitbox;
-    public Rectangle screenBounds;
+    protected int HP;
+    protected Rectangle hitbox;
+    protected Rectangle screenBounds;
     protected List<Attack> attacks;
     protected float acceleration;
-    public String faction;
+    protected String faction;
     protected int xp;
 
     public Entity(TextureRegion textureRegion, Vector2 position, float acceleration) {
@@ -36,7 +36,7 @@ public class Entity {
         hitbox = new Rectangle(position.x - SIZE / 2, position.y - SIZE / 2, SIZE, SIZE);
         screenBounds = new Rectangle();
         attacks = new ArrayList<>();
-        faction = "Player";
+        faction = "";
         xp = 0;
         updateWorldBounds();
     }
@@ -48,7 +48,6 @@ public class Entity {
 
     public void update(float delta) {
         hitbox.setPosition(position.x - SIZE / 2, position.y - SIZE / 2);
-        updateWorldBounds();
     }
 
     // Calcul position de l'entité à l'écran basé sur sa position dans le jeu
@@ -68,6 +67,7 @@ public class Entity {
     }
 
     public void render(SpriteBatch batch) {
+        updateWorldBounds();
         if (textureRegion != null) {
             batch.draw(
                     textureRegion,
@@ -165,5 +165,43 @@ public class Entity {
 
     public int xpDrop() {
         return 100;
+    }
+
+    // getters
+    public Vector2 getPosition() {
+        return position;
+    }
+
+    public boolean isSprinting() {
+        return isSprinting;
+    }
+
+    public int getHP() {
+        return HP;
+    }
+
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
+
+    public Rectangle getScreenBounds() {
+        updateWorldBounds();
+        return screenBounds;
+    }
+
+    public List<Attack> getAttacks() {
+        return attacks;
+    }
+
+    public float getAcceleration() {
+        return acceleration;
+    }
+
+    public String getFaction() {
+        return faction;
+    }
+
+    public int getXp() {
+        return xp;
     }
 }
