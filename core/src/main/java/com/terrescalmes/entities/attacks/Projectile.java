@@ -16,7 +16,7 @@ public class Projectile extends Entity {
 
     public Projectile(TextureRegion textureRegion, Vector2 position, Vector2 target, float acceleration, float range,
             Entity source, List<AttackEffect> hitEffects) {
-        super(textureRegion, position, acceleration);
+        super(textureRegion, position, acceleration, source.getFaction());
         this.target = target;
         this.range = range;
         this.source = source;
@@ -47,7 +47,7 @@ public class Projectile extends Entity {
 
     @Override
     public void handleCollision(Entity other) {
-        if (other != source) { // Évite de toucher la source
+        if (other != source && !other.getFaction().equals(faction)) { // Évite de toucher la source
             triggerHitEffects();
             HP = 0; // Détruit le projectile après collision
         }

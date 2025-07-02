@@ -173,7 +173,9 @@ public class Entity {
     }
 
     public void onKill(Entity victim) {
-        xp += victim.xpDrop();
+        if (!victim.getFaction().equals(faction)) {
+            xp += victim.xpDrop();
+        }
         System.out.println("Xp: " + xp);
     }
 
