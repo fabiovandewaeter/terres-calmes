@@ -26,7 +26,6 @@ public class Main extends ApplicationAdapter {
     public static final int DEFAULT_DISPLAY_HEIGHT = 720;
 
     private SpriteBatch batch;
-    // private IsometricCameraManager camera;
     private TopDownCameraManager camera;
     private ShapeRenderer shapeRenderer;
     private TileMap map;

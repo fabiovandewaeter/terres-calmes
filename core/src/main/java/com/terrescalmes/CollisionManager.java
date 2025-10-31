@@ -27,8 +27,10 @@ public class CollisionManager {
     public boolean allowMove(Entity source, Vector2 target) {
         // Créer une hitbox temporaire à la position cible
         Rectangle targetHitbox = new Rectangle(
-                target.x - source.getHitboxSize() / 2,
-                target.y - source.getHitboxSize() / 2,
+                // target.x - source.getHitboxSize() / 2,
+                // target.y - source.getHitboxSize() / 2,
+                target.x,
+                target.y,
                 source.getHitboxSize(),
                 source.getHitboxSize());
 

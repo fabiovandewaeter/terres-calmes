@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-// import com.terrescalmes.IsometricCameraManager;
 import com.terrescalmes.CollisionManager;
 import com.terrescalmes.TopDownCameraManager;
 import com.terrescalmes.entities.attacks.Attack;
@@ -21,7 +20,8 @@ import com.terrescalmes.entities.attacks.effects.SinglePointEffect;
 
 public class Entity {
 
-    public static final float DEFAULT_SIZE = 0.5f; // half a cube
+    // public static final float DEFAULT_SIZE = 0.5f; // half a cube
+    public static final float DEFAULT_SIZE = 1.0f;
     public static final String DEFAULT_FACTION = "";
 
     private TextureRegion textureRegion;
@@ -54,7 +54,9 @@ public class Entity {
         HP = maxHP;
         this.hitboxSize = hitboxSize;
         this.renderingSize = renderingSize;
-        hitbox = new Rectangle(position.x - hitboxSize / 2, position.y - hitboxSize / 2, hitboxSize, hitboxSize);
+        // hitbox = new Rectangle(position.x - hitboxSize / 2, position.y - hitboxSize /
+        // 2, hitboxSize, hitboxSize);
+        hitbox = new Rectangle(position.x, position.y, hitboxSize, hitboxSize);
         screenBounds = new Rectangle();
         this.faction = faction;
         attacks = new ArrayList<>();
@@ -74,7 +76,8 @@ public class Entity {
     }
 
     public void update(float delta) {
-        hitbox.setPosition(position.x - hitboxSize / 2, position.y - hitboxSize / 2);
+        // hitbox.setPosition(position.x - hitboxSize / 2, position.y - hitboxSize / 2);
+        hitbox.setPosition(position.x, position.y);
 
         // update cooldowns and attack logic
         for (Attack attack : attacks) {
@@ -100,8 +103,10 @@ public class Entity {
         float h = renderingSize * TopDownCameraManager.CUBE_HEIGHT;
 
         // Centrage de l'entité sur sa position
-        float x = displayPos.x - w / 2f;
-        float y = displayPos.y - h / 2f;
+        // float x = displayPos.x - w / 2f;
+        // float y = displayPos.y - h / 2f;
+        float x = displayPos.x;
+        float y = displayPos.y;
 
         screenBounds.set(x, y, w, h);
     }

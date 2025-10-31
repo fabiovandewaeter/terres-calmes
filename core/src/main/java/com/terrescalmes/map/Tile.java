@@ -26,8 +26,10 @@ public class Tile {
     public void render(SpriteBatch batch) {
         // En vue top-down, les tuiles sont simplement centrées sur leur position
         batch.draw(textureRegion,
-                displayPosition.x - TopDownCameraManager.CUBE_WIDTH / 2f,
-                displayPosition.y - TopDownCameraManager.CUBE_HEIGHT / 2f,
+                // displayPosition.x - TopDownCameraManager.CUBE_WIDTH / 2f,
+                // displayPosition.y - TopDownCameraManager.CUBE_HEIGHT / 2f,
+                displayPosition.x,
+                displayPosition.y,
                 TopDownCameraManager.CUBE_WIDTH,
                 TopDownCameraManager.CUBE_HEIGHT);
     }

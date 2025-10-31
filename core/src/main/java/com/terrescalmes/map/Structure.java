@@ -9,7 +9,8 @@ import com.terrescalmes.TopDownCameraManager;
 // on top of a Tile
 public class Structure {
 
-    protected static final float DEFAULT_SIZE = 0.5f; // half a cube
+    // protected static final float DEFAULT_SIZE = 0.5f; // half a cube
+    protected static final float DEFAULT_SIZE = 1.0f;
 
     private TextureRegion textureRegion;
     private Vector2 position;

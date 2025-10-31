@@ -18,10 +18,16 @@ import com.terrescalmes.entities.attacks.effects.ZoneEffect;
 
 public class Player extends Entity {
 
+    private Vector2 targetCell;
+    private boolean isMoving;
+    private static final float MOVE_SPEED = 5f; // Vitesse du déplacement vers la case cible
+
     public Player(TextureRegion textureRegion, Vector2 position, int maxHP, float acceleration) {
         super(textureRegion, position, maxHP, acceleration);
         faction = "Player";
         fillAttacks();
+        targetCell = null;
+        isMoving = false;
     }
 
     private void fillAttacks() {
@@ -34,25 +40,77 @@ public class Player extends Entity {
     @Override
     public void update(float delta) {
         super.update(delta);
+
+        // Gère le déplacement automatique vers la case cible
+        if (isMoving && targetCell != null) {
+            Vector2 direction = targetCell.cpy().sub(position);
+            float distance = direction.len();
+
+            if (distance < 0.01f) {
+                // Arrivé à destination
+                position.set(targetCell);
+                isMoving = false;
+                targetCell = null;
+            } else {
+                // Continue le mouvement
+                Vector2 move = direction.nor().scl(MOVE_SPEED * delta);
+                if (move.len() > distance) {
+                    position.set(targetCell);
+                    isMoving = false;
+                    targetCell = null;
+                } else {
+                    position.add(move);
+                }
+            }
+        }
+
+        System.out.println(position);
     }
 
     public void handleInputs(float delta) {
+        // Ne pas accepter de nouveaux inputs si on est en train de bouger
+        if (isMoving) {
+            // Toujours gérer les attaques même en mouvement
+            handleAttacks();
+            return;
+        }
+
         Vector2 dir = new Vector2();
 
-        // Déplacement top-down : les touches correspondent directement aux axes X et Y
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        // Détection des touches pour le déplacement case par case
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
             dir.x -= 1; // Gauche
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
             dir.x += 1; // Droite
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
             dir.y += 1; // Haut
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
             dir.y -= 1; // Bas
         }
 
+        // Si une direction est pressée, calculer la case cible
+        if (dir.len() > 0) {
+            // Calculer la case actuelle (arrondir à l'entier le plus proche)
+            int currentCellX = Math.round(position.x);
+            int currentCellY = Math.round(position.y);
+
+            // Calculer la case cible
+            int targetCellX = currentCellX + (int) dir.x;
+            int targetCellY = currentCellY + (int) dir.y;
+
+            Vector2 potentialTarget = new Vector2(targetCellX, targetCellY);
+
+            // Vérifier si le mouvement est possible
+            if (CollisionManager.getInstance().allowMove(this, potentialTarget)) {
+                targetCell = potentialTarget;
+                isMoving = true;
+            }
+        }
+
+        handleAttacks();
+    }
+
+    private void handleAttacks() {
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             Vector2 target = TopDownCameraManager.getInstance(Main.DEFAULT_DISPLAY_WIDTH, Main.DEFAULT_DISPLAY_HEIGHT)
                     .mouseToGameCoordinates();
@@ -63,25 +121,6 @@ public class Player extends Entity {
                     .mouseToGameCoordinates();
             if (weapon != null) {
                 weapon.attack(this, target);
-            }
-        }
-
-        isSprinting = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
-        float speed = acceleration * delta;
-
-        if (dir.len() > 0) {
-            Vector2 move = TopDownCameraManager.normalize(dir, speed);
-            if (isSprinting)
-                move.scl(1.5f);
-
-            Vector2 potentialDestination = position.cpy().add(move);
-
-            // Utiliser le système de glissement au lieu du simple allowMove
-            Vector2 newPosition = CollisionManager.getInstance().calculateSlideMovement(this, potentialDestination);
-
-            // Mettre à jour la position seulement si elle a changé
-            if (!newPosition.equals(position)) {
-                position.set(newPosition);
             }
         }
     }
