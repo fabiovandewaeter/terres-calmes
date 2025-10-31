@@ -63,8 +63,6 @@ public class Player extends Entity {
                 }
             }
         }
-
-        System.out.println(position);
     }
 
     public void handleInputs(float delta) {
@@ -78,14 +76,25 @@ public class Player extends Entity {
         Vector2 dir = new Vector2();
 
         // Détection des touches pour le déplacement case par case
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        // if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             dir.x -= 1; // Gauche
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            System.out.println("A");
+            // } else if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             dir.x += 1; // Droite
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            System.out.println("D");
+            // } else if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             dir.y += 1; // Haut
-        } else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            System.out.println("W");
+            // } else if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             dir.y -= 1; // Bas
+            System.out.println("S");
         }
 
         // Si une direction est pressée, calculer la case cible
