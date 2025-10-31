@@ -12,18 +12,16 @@ public class TopDownCameraManager extends OrthographicCamera {
 
     private static TopDownCameraManager instance;
 
-    public static final int DISPLAY_WIDTH = 1920;
-    public static final int DISPLAY_HEIGHT = 1080;
     public static final int CUBE_WIDTH = 128;
     public static final int CUBE_HEIGHT = 128;
 
-    private TopDownCameraManager() {
-        super(DISPLAY_WIDTH, DISPLAY_HEIGHT);
+    private TopDownCameraManager(int displayWidth, int displayHeight) {
+        super(displayWidth, displayHeight);
     }
 
-    public static TopDownCameraManager getInstance() {
+    public static TopDownCameraManager getInstance(int displayWidth, int displayHeight) {
         if (instance == null) {
-            instance = new TopDownCameraManager();
+            instance = new TopDownCameraManager(displayWidth, displayHeight);
         }
         return instance;
     }
@@ -52,8 +50,8 @@ public class TopDownCameraManager extends OrthographicCamera {
         return displayToGameCoordinates(world2);
     }
 
-    public static void reset() {
-        instance = new TopDownCameraManager();
+    public static void reset(int displayWidth, int displayHeight) {
+        instance = new TopDownCameraManager(displayWidth, displayHeight);
     }
 
     public static Vector2 displayToGameCoordinates(Vector2 displayCoords) {

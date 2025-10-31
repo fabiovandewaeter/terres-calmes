@@ -22,6 +22,8 @@ public class Main extends ApplicationAdapter {
 
     private static final float SPAWN_INTERVAL = 2f;
     private static final int SPAWN_LIMIT = 3;
+    public static final int DEFAULT_DISPLAY_WIDTH = 1280;
+    public static final int DEFAULT_DISPLAY_HEIGHT = 720;
 
     private SpriteBatch batch;
     // private IsometricCameraManager camera;
@@ -35,7 +37,7 @@ public class Main extends ApplicationAdapter {
     public void create() {
         batch = new SpriteBatch();
         // camera = IsometricCameraManager.getInstance();
-        camera = TopDownCameraManager.getInstance();
+        camera = TopDownCameraManager.getInstance(DEFAULT_DISPLAY_WIDTH, DEFAULT_DISPLAY_HEIGHT);
         shapeRenderer = new ShapeRenderer();
         map = new TileMap();
         entityManager = EntityManager.getInstance();
@@ -57,7 +59,8 @@ public class Main extends ApplicationAdapter {
     private void handleClick() {
         if (Gdx.input.justTouched()) {
             // Vector2 world2 = IsometricCameraManager.getInstance().mouseCoordinates();
-            Vector2 world2 = TopDownCameraManager.getInstance().mouseCoordinates();
+            Vector2 world2 = TopDownCameraManager.getInstance(DEFAULT_DISPLAY_WIDTH, DEFAULT_DISPLAY_WIDTH)
+                    .mouseCoordinates();
             // Vector2 target =
             // IsometricCameraManager.getInstance().mouseToGameCoordinates();
             // Vector2 target =

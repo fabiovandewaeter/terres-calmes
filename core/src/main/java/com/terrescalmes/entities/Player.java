@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.CollisionManager;
+import com.terrescalmes.Main;
 import com.terrescalmes.TopDownCameraManager;
 import com.terrescalmes.entities.attacks.RangedAttack;
 import com.terrescalmes.entities.attacks.Attack;
@@ -53,11 +54,13 @@ public class Player extends Entity {
         }
 
         if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-            Vector2 target = TopDownCameraManager.getInstance().mouseToGameCoordinates();
+            Vector2 target = TopDownCameraManager.getInstance(Main.DEFAULT_DISPLAY_WIDTH, Main.DEFAULT_DISPLAY_HEIGHT)
+                    .mouseToGameCoordinates();
             attacks.get(0).execute(this, target, null);
         }
         if (Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
-            Vector2 target = TopDownCameraManager.getInstance().mouseToGameCoordinates();
+            Vector2 target = TopDownCameraManager.getInstance(Main.DEFAULT_DISPLAY_WIDTH, Main.DEFAULT_DISPLAY_HEIGHT)
+                    .mouseToGameCoordinates();
             if (weapon != null) {
                 weapon.attack(this, target);
             }
