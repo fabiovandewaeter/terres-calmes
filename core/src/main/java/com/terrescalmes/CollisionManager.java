@@ -1,7 +1,6 @@
 package com.terrescalmes;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.map.Chunk;
 import com.terrescalmes.map.Structure;
@@ -10,7 +9,6 @@ import com.terrescalmes.util.Vector2I;
 
 public class CollisionManager {
 
-    private static final float COLLISION_EPSILON = 0.001f;
     private static CollisionManager instance;
 
     private TileMap tilemap;

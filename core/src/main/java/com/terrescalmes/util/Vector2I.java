@@ -11,10 +11,8 @@ public class Vector2I {
     }
 
     public Vector2I(float x, float y) {
-        Vector2 tempo = new Vector2(x, y);
-        Vector2I newTempo = Vector2I.from(tempo);
-        this.x = newTempo.x;
-        this.y = newTempo.y;
+        this.x = Math.round(x);
+        this.y = Math.round(y);
     }
 
     public Vector2I(int x, int y) {
@@ -70,5 +68,25 @@ public class Vector2I {
     @Override
     public String toString() {
         return "(" + x + "," + y + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        Vector2I vector2I = (Vector2I) obj;
+        return x == vector2I.x && y == vector2I.y;
+    }
+
+    @Override
+    public int hashCode() {
+        // Hash simple mais efficace pour un Vector2I
+        return 31 * x + y;
+    }
+
+    public int manhattanDistance(Vector2I b) {
+        return Math.abs(this.x - b.x) + Math.abs(this.y - b.y);
     }
 }

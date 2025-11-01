@@ -167,8 +167,8 @@ public class Entity {
         }
 
         // Calculer la case cible
-        int targetCellX = Math.round(position.x) + Math.round(direction.x);
-        int targetCellY = Math.round(position.y) + Math.round(direction.y);
+        int targetCellX = position.x + direction.x;
+        int targetCellY = position.y + direction.y;
 
         Vector2I potentialTarget = new Vector2I(targetCellX, targetCellY);
 
@@ -269,11 +269,11 @@ public class Entity {
     }
 
     public boolean collide(Vector2I position) {
-        return hitbox.contains(position.toVector2());
+        return hitbox.contains(position.x, position.y);
     }
 
     public boolean collide(Entity other) {
-        return this.hitbox.overlaps(other.hitbox);
+        return hitbox.overlaps(other.hitbox);
     }
 
     public void handleCollision(Entity other) {
