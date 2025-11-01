@@ -44,14 +44,11 @@ public class RangedAttack extends Attack {
             if (hitEntity.isDead()) {
                 source.onKill(hitEntity);
             }
-
-            System.out.println("YES " + hitPosition);
         } else {
             // Tir dans le vide ou obstacle - déclencher les effets quand même
             for (IAttackEffect effect : hitEffects) {
                 effect.trigger(source, hitPosition, statModifiers);
             }
-            System.out.println("NO" + hitPosition);
         }
 
         resetCooldown();

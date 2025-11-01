@@ -78,34 +78,6 @@ public class BasicEnemyBehavior extends EntityBehavior {
         }
     }
 
-    private Vector2I calculateDirectionToPlayer(Player player) {
-        Vector2I playerPos = player.getPosition();
-        Vector2I enemyPos = entity.getPosition();
-
-        int dx = Integer.compare(playerPos.x, enemyPos.x);
-        int dy = Integer.compare(playerPos.y, enemyPos.y);
-
-        // Prioriser le déplacement selon l'axe le plus éloigné
-        if (Math.abs(playerPos.x - enemyPos.x) > Math.abs(playerPos.y - enemyPos.y)) {
-            return new Vector2I(dx, 0);
-        } else {
-            return new Vector2I(0, dy);
-        }
-    }
-
-    private void tryAlternativeDirections() {
-        Vector2I[] directions = {
-                new Vector2I(1, 0), new Vector2I(-1, 0),
-                new Vector2I(0, 1), new Vector2I(0, -1)
-        };
-
-        for (Vector2I dir : directions) {
-            if (entity.moveInDirection(dir)) {
-                break;
-            }
-        }
-    }
-
     private void executeCurrentState(float delta, Player player) {
         switch (currentState) {
             case IDLE:

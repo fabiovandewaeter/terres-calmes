@@ -59,7 +59,6 @@ public class Player extends Entity {
         }
 
         // Si une direction est pressée
-        // if (dir.len() > 0) {
         if (dirX != 0 || dirY != 0) {
             // dir.nor();
             Vector2I moveDir = new Vector2I(dirX, dirY);

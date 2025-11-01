@@ -24,28 +24,24 @@ public class MeleeAttack extends Attack {
 
         Vector2I sourcePos = source.getPosition();
         // int manhattanDist = sourcePos.manhattanDistance(targetPos);
-        int manhattanDist = sourcePos.chebyshevDistance(targetPos);
+        int chebyshevDistance = sourcePos.chebyshevDistance(targetPos);
 
         Vector2I attackPosition;
 
-        if (manhattanDist > range) {
-            // Calculer la direction avec la distance de Manhattan
+        if (chebyshevDistance > range) {
+            // Calculer la direction
             int dx = targetPos.x - sourcePos.x;
             int dy = targetPos.y - sourcePos.y;
 
-            // Normaliser pour la distance de Manhattan
-            int absDx = Math.abs(dx);
-            int absDy = Math.abs(dy);
-
-            if (absDx > absDy) {
-                // Priorité horizontale
+            // Normaliser la direction pour qu'elle reste dans la range
+            // En gardant le ratio entre dx et dy
+            if (Math.abs(dx) > Math.abs(dy)) {
                 attackPosition = new Vector2I(
                         sourcePos.x + (dx > 0 ? range : -range),
-                        sourcePos.y);
+                        sourcePos.y + (int) Math.signum(dy) * Math.min(range, Math.abs(dy)));
             } else {
-                // Priorité verticale
                 attackPosition = new Vector2I(
-                        sourcePos.x,
+                        sourcePos.x + (int) Math.signum(dx) * Math.min(range, Math.abs(dx)),
                         sourcePos.y + (dy > 0 ? range : -range));
             }
         } else {
@@ -53,7 +49,6 @@ public class MeleeAttack extends Attack {
         }
 
         // spawn visuel (juste le visuel)
-        System.out.println("execute() " + attackPosition + " " + manhattanDist + " " + range);
         EntityManager.getInstance().spawnHitMarker(attackPosition);
 
         for (IAttackEffect effect : hitEffects) {

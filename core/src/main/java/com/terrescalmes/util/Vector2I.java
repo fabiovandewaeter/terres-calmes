@@ -93,6 +93,6 @@ public class Vector2I {
     // }
 
     public int chebyshevDistance(Vector2I b) {
-        return Math.max(Math.abs(this.x - b.x), Math.abs(this.y - b.y));
+        return Math.max(Math.abs(b.x - this.x), Math.abs(b.y - this.y));
     }
 }
