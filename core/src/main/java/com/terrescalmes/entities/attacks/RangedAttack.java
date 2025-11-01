@@ -28,6 +28,8 @@ public class RangedAttack extends Attack {
 
         // Tir instantané avec raycast case par case
         Vector2I hitPosition = raycastToTarget(source, targetPos);
+        // spawn visuel (juste le visuel)
+        EntityManager.getInstance().spawnHitMarker(hitPosition);
 
         // Vérifier si on a touché une entité
         Entity hitEntity = findEntityAtPosition(hitPosition, source);
@@ -100,7 +102,6 @@ public class RangedAttack extends Attack {
         int y = y0;
 
         CollisionManager collisionManager = CollisionManager.getInstance();
-        EntityManager entityManager = EntityManager.getInstance();
 
         while (true) {
             Vector2I currentPos = new Vector2I(x, y);

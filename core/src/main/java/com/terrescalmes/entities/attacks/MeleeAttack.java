@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.items.StatModifier;
 import com.terrescalmes.util.Vector2I;
 import com.terrescalmes.entities.Entity;
+import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.entities.attacks.effects.IAttackEffect;
 
 public class MeleeAttack extends Attack {
@@ -36,6 +37,8 @@ public class MeleeAttack extends Attack {
             // La cible est à portée, attaquer à la position demandée
             attackPosition = targetPos.cpy().toVector2();
         }
+        // spawn visuel (juste le visuel)
+        EntityManager.getInstance().spawnHitMarker(Vector2I.from(attackPosition));
 
         for (IAttackEffect effect : hitEffects) {
             effect.trigger(source, Vector2I.from(attackPosition), statModifiers);

@@ -111,6 +111,7 @@ public class Main extends ApplicationAdapter {
         boolean showHitboxes = true; // ou false pour les cacher
         if (showHitboxes) {
             entityManager.renderHitboxes(batch, shapeRenderer);
+            entityManager.renderHitMarkers(batch, shapeRenderer);
         }
 
         batch.end();

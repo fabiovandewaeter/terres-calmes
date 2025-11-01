@@ -1,6 +1,7 @@
 package com.terrescalmes.entities;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.terrescalmes.util.Vector2I;
 
 public class EntityManager {
 
@@ -16,6 +18,7 @@ public class EntityManager {
 
     public List<Entity> entities;
     private Player player;
+    private List<HitMarker> hitMarkers = new ArrayList<>();
 
     private EntityManager() {
         entities = new ArrayList<>();
@@ -26,6 +29,10 @@ public class EntityManager {
             instance = new EntityManager();
         }
         return instance;
+    }
+
+    public void spawnHitMarker(Vector2I tile) {
+        hitMarkers.add(new HitMarker(tile));
     }
 
     public static void reset() {
@@ -70,6 +77,20 @@ public class EntityManager {
         }
         checkCollisions();
         removeDeadEntities();
+        // update hit markers et suppression des expirés
+        Iterator<HitMarker> it = hitMarkers.iterator();
+        while (it.hasNext()) {
+            HitMarker m = it.next();
+            if (m.update(delta)) {
+                it.remove();
+            }
+        }
+    }
+
+    public void renderHitMarkers(SpriteBatch batch, ShapeRenderer shapeRenderer) {
+        for (HitMarker m : hitMarkers) {
+            m.render(batch, shapeRenderer);
+        }
     }
 
     // checks collisions between entities
