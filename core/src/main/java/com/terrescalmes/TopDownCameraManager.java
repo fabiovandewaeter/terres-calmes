@@ -47,6 +47,7 @@ public class TopDownCameraManager extends OrthographicCamera {
     // Retourne les coordonnées de jeu
     public Vector2 mouseToGameCoordinates() {
         Vector2 world2 = mouseCoordinates();
+        System.out.println("mouseToGameCoordinates() " + world2);
         return displayToGameCoordinates(world2);
     }
 
@@ -58,6 +59,7 @@ public class TopDownCameraManager extends OrthographicCamera {
         // Simple conversion inverse pour la vue top-down
         float gx = displayCoords.x / CUBE_WIDTH;
         float gy = displayCoords.y / CUBE_HEIGHT;
+        System.out.println("displayToGameCoordinates() " + gx + " " + gy);
         return new Vector2(gx, gy);
     }
 

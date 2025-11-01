@@ -47,7 +47,7 @@ public class Main extends ApplicationAdapter {
 
     private void addEntities() {
         Player player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                new Vector2I(0, 0), 100, 2);
+                new Vector2I(0, 0), 1000000000, 2);
         player.equipWeapon(ItemFactory.createWeapon(ItemId.IRON_SWORD));
         entityManager.add(player);
         Entity entity = new Entity(

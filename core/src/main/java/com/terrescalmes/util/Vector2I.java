@@ -11,8 +11,8 @@ public class Vector2I {
     }
 
     public Vector2I(float x, float y) {
-        this.x = Math.round(x);
-        this.y = Math.round(y);
+        this.x = (int) Math.floor(x);
+        this.y = (int) Math.floor(y);
     }
 
     public Vector2I(int x, int y) {
@@ -31,7 +31,9 @@ public class Vector2I {
 
     // constructeur depuis Vector2 (arrondi)
     public static Vector2I from(Vector2 v) {
-        return new Vector2I(Math.round(v.x), Math.round(v.y));
+        int ix = (int) Math.floor(v.x);
+        int iy = (int) Math.floor(v.y);
+        return new Vector2I(ix, iy);
     }
 
     // opérations basiques entières si tu en as besoin
