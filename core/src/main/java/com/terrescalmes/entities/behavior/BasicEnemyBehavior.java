@@ -48,7 +48,8 @@ public class BasicEnemyBehavior extends EntityBehavior {
 
         // Déterminer l'état en fonction de la distance joueur/ennemi
         if (player != null) {
-            int dist = entity.getPosition().manhattanDistance(player.getPosition());
+            // int dist = entity.getPosition().manhattanDistance(player.getPosition());
+            int dist = entity.getPosition().chebyshevDistance(player.getPosition());
 
             if (dist <= ATTACK_RANGE) {
                 changeState(EntityState.ATTACKING);
@@ -183,7 +184,9 @@ public class BasicEnemyBehavior extends EntityBehavior {
             candidates.add(new Vector2I(playerPos.x + d.x, playerPos.y + d.y));
         }
 
-        candidates.sort((a, b) -> Integer.compare(a.manhattanDistance(enemyPos), b.manhattanDistance(enemyPos)));
+        // candidates.sort((a, b) -> Integer.compare(a.manhattanDistance(enemyPos),
+        // b.manhattanDistance(enemyPos)));
+        candidates.sort((a, b) -> Integer.compare(a.chebyshevDistance(enemyPos), b.chebyshevDistance(enemyPos)));
 
         // Essayer chaque case : si moveToPosition renvoie true, le pathfinding a été
         // lancé avec succès
@@ -205,7 +208,8 @@ public class BasicEnemyBehavior extends EntityBehavior {
             return;
         }
 
-        int dist = entity.getPosition().manhattanDistance(player.getPosition());
+        // int dist = entity.getPosition().manhattanDistance(player.getPosition());
+        int dist = entity.getPosition().chebyshevDistance(player.getPosition());
         if (dist > ATTACK_RANGE) {
             // Le joueur s'est éloigné : poursuivre
             changeState(EntityState.PURSUING);

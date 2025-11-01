@@ -88,7 +88,11 @@ public class Vector2I {
         return 31 * x + y;
     }
 
-    public int manhattanDistance(Vector2I b) {
-        return Math.abs(this.x - b.x) + Math.abs(this.y - b.y);
+    // public int manhattanDistance(Vector2I b) {
+    // return Math.abs(this.x - b.x) + Math.abs(this.y - b.y);
+    // }
+
+    public int chebyshevDistance(Vector2I b) {
+        return Math.max(Math.abs(this.x - b.x), Math.abs(this.y - b.y));
     }
 }

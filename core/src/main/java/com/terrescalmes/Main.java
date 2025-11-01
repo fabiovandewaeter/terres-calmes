@@ -47,7 +47,7 @@ public class Main extends ApplicationAdapter {
 
     private void addEntities() {
         Player player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                new Vector2I(0, 0), 1000000000, 2);
+                new Vector2I(0, 0), 100000000, 2);
         player.equipWeapon(ItemFactory.createWeapon(ItemId.IRON_SWORD));
         entityManager.add(player);
         Entity entity = new Entity(
@@ -58,13 +58,7 @@ public class Main extends ApplicationAdapter {
 
     private void handleClick() {
         if (Gdx.input.justTouched()) {
-            // Vector2 world2 = IsometricCameraManager.getInstance().mouseCoordinates();
-            Vector2 world2 = TopDownCameraManager.getInstance(DEFAULT_DISPLAY_WIDTH, DEFAULT_DISPLAY_WIDTH)
-                    .mouseCoordinates();
-            // Vector2 target =
-            // IsometricCameraManager.getInstance().mouseToGameCoordinates();
-            // Vector2 target =
-            // TopDownCameraManager.getInstance().mouseToGameCoordinates();
+            Vector2 world2 = camera.mouseCoordinates();
             entityManager.handleClick(world2);
         }
     }
@@ -84,7 +78,7 @@ public class Main extends ApplicationAdapter {
         spawnTimer += delta;
         if (spawnTimer >= SPAWN_INTERVAL) {
             spawnTimer -= SPAWN_INTERVAL; // on décrémente plutôt que reset pour garder le surplus
-            spawnEntities(2, 10f); // ex. 5 entités dans un rayon de 5
+            // spawnEntities(2, 10f); // ex. 5 entités dans un rayon de 5
         }
     }
 

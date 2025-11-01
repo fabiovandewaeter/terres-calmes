@@ -1,6 +1,7 @@
 package com.terrescalmes.entities.attacks;
 
 import java.util.List;
+import java.util.Vector;
 
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.items.StatModifier;
@@ -21,27 +22,42 @@ public class MeleeAttack extends Attack {
             return;
         }
 
-        Vector2 sourcePos = source.getPosition().toVector2();
-        float distanceToTarget = sourcePos.dst(targetPos.toVector2());
+        Vector2I sourcePos = source.getPosition();
+        // int manhattanDist = sourcePos.manhattanDistance(targetPos);
+        int manhattanDist = sourcePos.chebyshevDistance(targetPos);
 
-        Vector2 attackPosition;
+        Vector2I attackPosition;
 
-        if (distanceToTarget > range) {
-            // Calculer la direction vers la cible
-            Vector2 direction = targetPos.toVector2().cpy().sub(sourcePos).nor();
+        if (manhattanDist > range) {
+            // Calculer la direction avec la distance de Manhattan
+            int dx = targetPos.x - sourcePos.x;
+            int dy = targetPos.y - sourcePos.y;
 
-            // Créer une nouvelle position d'attaque à la portée maximale dans cette
-            // direction
-            attackPosition = sourcePos.cpy().add(direction.scl(range));
+            // Normaliser pour la distance de Manhattan
+            int absDx = Math.abs(dx);
+            int absDy = Math.abs(dy);
+
+            if (absDx > absDy) {
+                // Priorité horizontale
+                attackPosition = new Vector2I(
+                        sourcePos.x + (dx > 0 ? range : -range),
+                        sourcePos.y);
+            } else {
+                // Priorité verticale
+                attackPosition = new Vector2I(
+                        sourcePos.x,
+                        sourcePos.y + (dy > 0 ? range : -range));
+            }
         } else {
-            // La cible est à portée, attaquer à la position demandée
-            attackPosition = targetPos.cpy().toVector2();
+            attackPosition = targetPos;
         }
+
         // spawn visuel (juste le visuel)
-        EntityManager.getInstance().spawnHitMarker(Vector2I.from(attackPosition));
+        System.out.println("execute() " + attackPosition + " " + manhattanDist + " " + range);
+        EntityManager.getInstance().spawnHitMarker(attackPosition);
 
         for (IAttackEffect effect : hitEffects) {
-            effect.trigger(source, Vector2I.from(attackPosition), statModifiers);
+            effect.trigger(source, attackPosition, statModifiers);
         }
 
         resetCooldown();
