@@ -25,7 +25,7 @@ public class ItemFactory {
                 return new Weapon(
                         itemId,
                         null,
-                        new MeleeAttack(1f, 0.2f, List.of(new SinglePointEffect(1))),
+                        new MeleeAttack(1, 0.2f, List.of(new SinglePointEffect(1))),
                         List.of(new StatModifier("damage", 1.0f, true)));
             default:
                 throw new IllegalArgumentException("Unknown item ID: " + itemId);

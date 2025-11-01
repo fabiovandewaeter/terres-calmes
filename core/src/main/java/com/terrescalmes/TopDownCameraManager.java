@@ -75,7 +75,7 @@ public class TopDownCameraManager extends OrthographicCamera {
         Player player = EntityManager.getInstance().getPlayer();
         if (player != null) {
             // Conversion des coordonnées de jeu du joueur vers coordonnées d'affichage
-            Vector2 playerDisplayPos = TopDownCameraManager.gameToDisplayCoordinates(player.getPosition());
+            Vector2 playerDisplayPos = TopDownCameraManager.gameToDisplayCoordinates(player.getPosition().toVector2());
             // position.set(playerDisplayPos.x, playerDisplayPos.y, 0);
             // Centrer la caméra sur le milieu du sprite du joueur
             position.set(playerDisplayPos.x + (CUBE_WIDTH * player.getHitboxSize()) / 2,

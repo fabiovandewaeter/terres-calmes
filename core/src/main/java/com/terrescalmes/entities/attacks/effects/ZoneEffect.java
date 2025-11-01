@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.items.StatModifier;
+import com.terrescalmes.util.Vector2I;
 
 public class ZoneEffect implements IAttackEffect {
 
@@ -19,7 +20,7 @@ public class ZoneEffect implements IAttackEffect {
     }
 
     @Override
-    public void trigger(Entity source, Vector2 position, List<StatModifier> statModifiers) {
+    public void trigger(Entity source, Vector2I position, List<StatModifier> statModifiers) {
         Circle explosionCircle = new Circle(position.x, position.y, radius);
         List<Entity> entities = EntityManager.getInstance().getEntitiesInCircle(explosionCircle);
 

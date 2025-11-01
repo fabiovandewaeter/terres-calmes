@@ -6,6 +6,7 @@ import com.terrescalmes.entities.Entity;
 import com.terrescalmes.map.Chunk;
 import com.terrescalmes.map.Structure;
 import com.terrescalmes.map.TileMap;
+import com.terrescalmes.util.Vector2I;
 
 public class CollisionManager {
 
@@ -24,11 +25,9 @@ public class CollisionManager {
         return instance;
     }
 
-    public boolean allowMove(Entity source, Vector2 target) {
+    public boolean allowMove(Entity source, Vector2I target) {
         // Créer une hitbox temporaire à la position cible
         Rectangle targetHitbox = new Rectangle(
-                // target.x - source.getHitboxSize() / 2,
-                // target.y - source.getHitboxSize() / 2,
                 target.x,
                 target.y,
                 source.getHitboxSize(),
@@ -40,39 +39,6 @@ public class CollisionManager {
         }
 
         return true;
-    }
-
-    // Méthode principale pour calculer le mouvement avec glissement
-    public Vector2 calculateSlideMovement(Entity source, Vector2 targetPosition) {
-        Vector2 originalPosition = source.getPosition();
-        Vector2 movement = targetPosition.cpy().sub(originalPosition);
-
-        // Si pas de mouvement, retourner la position actuelle
-        if (movement.len2() < COLLISION_EPSILON * COLLISION_EPSILON) {
-            return originalPosition.cpy();
-        }
-
-        // Tester le mouvement direct
-        if (allowMove(source, targetPosition)) {
-            return targetPosition.cpy();
-        }
-
-        // Essayer le glissement horizontal puis vertical
-        Vector2 horizontalTarget = new Vector2(targetPosition.x, originalPosition.y);
-        Vector2 verticalTarget = new Vector2(originalPosition.x, targetPosition.y);
-
-        // Tester mouvement horizontal seulement
-        if (allowMove(source, horizontalTarget)) {
-            return horizontalTarget;
-        }
-
-        // Tester mouvement vertical seulement
-        if (allowMove(source, verticalTarget)) {
-            return verticalTarget;
-        }
-
-        // Aucun mouvement possible, rester à la position actuelle
-        return originalPosition.cpy();
     }
 
     private static boolean hasCollisionWithStructures(Rectangle hitbox, TileMap tilemap) {

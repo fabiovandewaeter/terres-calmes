@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.entities.attacks.Attack;
+import com.terrescalmes.util.Vector2I;
 
 public class Weapon extends Item {
 
@@ -18,7 +19,7 @@ public class Weapon extends Item {
         this.statModifiers = statModifiers;
     }
 
-    public void attack(Entity source, Vector2 target) {
+    public void attack(Entity source, Vector2I target) {
         attack.execute(source, target, statModifiers);
     }
 

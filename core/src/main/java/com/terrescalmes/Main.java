@@ -17,6 +17,7 @@ import com.terrescalmes.items.ItemId;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.map.TileMap;
+import com.terrescalmes.util.Vector2I;
 
 public class Main extends ApplicationAdapter {
 
@@ -46,12 +47,12 @@ public class Main extends ApplicationAdapter {
 
     private void addEntities() {
         Player player = new Player(new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                new Vector2(0, 0), 100, 2);
+                new Vector2I(0, 0), 100, 2);
         player.equipWeapon(ItemFactory.createWeapon(ItemId.IRON_SWORD));
         entityManager.add(player);
         Entity entity = new Entity(
                 new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                new Vector2(5, 5), 200, 2);
+                new Vector2I(5, 5), 200, 2);
         entityManager.add(entity);
     }
 
@@ -147,7 +148,7 @@ public class Main extends ApplicationAdapter {
         if (player == null)
             return; // pas de joueur, pas de spawn
 
-        Vector2 center = player.getPosition();
+        Vector2 center = player.getPosition().toVector2();
         for (int i = 0; i < count; i++) {
             // angle aléatoire en radians
             float angle = MathUtils.random(0f, MathUtils.PI2);
@@ -160,7 +161,7 @@ public class Main extends ApplicationAdapter {
             // Crée l’entité à cette position
             Entity entity = new Entity(
                     new TextureRegion(new Texture("entities/moai.png"), 0, 0, 612, 612),
-                    new Vector2(x, y), 20, 1, Entity.DEFAULT_SIZE, Entity.DEFAULT_SIZE * 2, "Enemies");
+                    new Vector2I(x, y), 20, 1, Entity.DEFAULT_SIZE, Entity.DEFAULT_SIZE * 2, "Enemies");
             entityManager.add(entity);
         }
     }

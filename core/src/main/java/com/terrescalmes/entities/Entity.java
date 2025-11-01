@@ -15,17 +15,20 @@ import com.terrescalmes.entities.attacks.MeleeAttack;
 import com.terrescalmes.entities.behavior.BasicEnemyBehavior;
 import com.terrescalmes.entities.behavior.EntityBehavior;
 import com.terrescalmes.items.Weapon;
+import com.terrescalmes.util.Vector2I;
 import com.terrescalmes.entities.attacks.effects.IAttackEffect;
 import com.terrescalmes.entities.attacks.effects.SinglePointEffect;
 
 public class Entity {
 
-    // public static final float DEFAULT_SIZE = 0.5f; // half a cube
     public static final float DEFAULT_SIZE = 1.0f;
     public static final String DEFAULT_FACTION = "";
+    // private static final float CELL_MOVE_SPEED = 5f; // Vitesse de déplacement
+    // entre cases
+    private static final float MOVE_COOLDOWN = 0.2f; // Temps minimum entre deux mouvements
 
     private TextureRegion textureRegion;
-    protected Vector2 position; // Position en coordonnées de jeu
+    protected Vector2I position;
     protected float acceleration;
     protected boolean isSprinting;
     protected int maxHP;
@@ -40,11 +43,18 @@ public class Entity {
     protected EntityBehavior behavior;
     protected Weapon weapon;
 
-    public Entity(TextureRegion textureRegion, Vector2 position, int maxHP, float acceleration) {
+    // Système de mouvement case par case
+    protected Vector2I targetCell;
+    protected boolean isMoving;
+    protected List<Vector2I> path; // Chemin à suivre
+    protected int currentPathIndex; // Index de la prochaine case dans le chemin
+    protected float moveTimer; // Timer pour limiter la vitesse
+
+    public Entity(TextureRegion textureRegion, Vector2I position, int maxHP, float acceleration) {
         this(textureRegion, position, maxHP, acceleration, DEFAULT_SIZE, DEFAULT_SIZE, DEFAULT_FACTION);
     }
 
-    public Entity(TextureRegion textureRegion, Vector2 position, int maxHP, float acceleration, float hitboxSize,
+    public Entity(TextureRegion textureRegion, Vector2I position, int maxHP, float acceleration, float hitboxSize,
             float renderingSize, String faction) {
         this.textureRegion = textureRegion;
         this.position = position;
@@ -54,13 +64,19 @@ public class Entity {
         HP = maxHP;
         this.hitboxSize = hitboxSize;
         this.renderingSize = renderingSize;
-        // hitbox = new Rectangle(position.x - hitboxSize / 2, position.y - hitboxSize /
-        // 2, hitboxSize, hitboxSize);
         hitbox = new Rectangle(position.x, position.y, hitboxSize, hitboxSize);
         screenBounds = new Rectangle();
         this.faction = faction;
         attacks = new ArrayList<>();
         xp = 0;
+
+        // Initialisation du système de mouvement
+        targetCell = null;
+        isMoving = false;
+        path = null;
+        currentPathIndex = 0;
+        moveTimer = 0f;
+
         updateWorldBounds();
         if ("Enemies".equals(faction)) {
             this.behavior = new BasicEnemyBehavior(this);
@@ -70,14 +86,24 @@ public class Entity {
 
     private void fillEnemyAttacks() {
         List<IAttackEffect> attackEffects = new ArrayList<>();
-        attackEffects.add(new SinglePointEffect(15)); // Dégâts de mêlée
-        Attack meleeAttack = new MeleeAttack(1.0f, 1.5f, attackEffects); // portée 1.0, cooldown 1.5s
+        attackEffects.add(new SinglePointEffect(15));
+        Attack meleeAttack = new MeleeAttack(1, 1.5f, attackEffects);
         attacks.add(meleeAttack);
     }
 
     public void update(float delta) {
-        // hitbox.setPosition(position.x - hitboxSize / 2, position.y - hitboxSize / 2);
         hitbox.setPosition(position.x, position.y);
+
+        // Mise à jour du timer de mouvement
+        if (moveTimer > 0) {
+            moveTimer -= delta;
+            if (moveTimer < 0) {
+                moveTimer = 0f;
+            }
+        }
+
+        // Mise à jour du mouvement case par case
+        updateCellMovement(delta);
 
         // update cooldowns and attack logic
         for (Attack attack : attacks) {
@@ -93,21 +119,125 @@ public class Entity {
         }
     }
 
-    // Calcul position de l'entité à l'écran basé sur sa position dans le jeu
-    private void updateWorldBounds() {
-        // Conversion des coordonnées de jeu vers coordonnées d'affichage
-        Vector2 displayPos = TopDownCameraManager.gameToDisplayCoordinates(position);
+    /**
+     * Gère le mouvement case par case (DISCRET - pas d'interpolation flottante
+     * ici).
+     * Lorsqu'une targetCell est définie, l'entité saute sur la case cible dans
+     * la prochaine mise à jour, puis passe à la suivante si un chemin est défini.
+     */
+    protected void updateCellMovement(float delta) {
+        if (!isMoving || targetCell == null || moveTimer > 0) {
+            return;
+        }
 
-        // Taille en pixels de l'entité
+        // Déplacer instantanément vers la case cible
+        position.x = targetCell.x;
+        position.y = targetCell.y;
+
+        // Mettre à jour la hitbox immédiatement
+        hitbox.setPosition(position.x, position.y);
+
+        float cooldown = MOVE_COOLDOWN;
+        if (acceleration > 0f) {
+            cooldown = MOVE_COOLDOWN / acceleration;
+        }
+        moveTimer = cooldown;
+
+        // Si on suit un chemin, passer à la case suivante (mais ne pas l'appliquer
+        // tout de suite dans le même update pour éviter de traverser plusieurs cases en
+        // un frame)
+        if (path != null && currentPathIndex < path.size() - 1) {
+            currentPathIndex++;
+            Vector2I next = path.get(currentPathIndex);
+            targetCell = new Vector2I(next.x, next.y);
+        } else {
+            stopMovement();
+        }
+    }
+
+    /**
+     * Déplace l'entité d'une case dans une direction cardinale
+     * 
+     * @param direction Direction normalisée (1,0), (-1,0), (0,1) ou (0,-1)
+     * @return true si le mouvement a été initié, false si bloqué
+     */
+    public boolean moveInDirection(Vector2I direction) {
+        if (isMoving || moveTimer > 0) {
+            return false; // Déjà en mouvement
+        }
+
+        // Calculer la case cible
+        int targetCellX = Math.round(position.x) + Math.round(direction.x);
+        int targetCellY = Math.round(position.y) + Math.round(direction.y);
+
+        Vector2I potentialTarget = new Vector2I(targetCellX, targetCellY);
+
+        // Vérifier si le mouvement est possible
+        if (CollisionManager.getInstance().allowMove(this, potentialTarget)) {
+            targetCell = potentialTarget;
+            isMoving = true;
+            return true;
+        } else {
+            System.out.println("Mouvement bloqué vers (" + targetCellX + ", " + targetCellY + ")");
+            return false;
+        }
+    }
+
+    /**
+     * Déplace l'entité vers une position avec pathfinding
+     * 
+     * @param destination   Position de destination
+     * @param maxIterations Nombre max d'itérations pour A* (1000 recommandé)
+     * @return true si un chemin a été trouvé, false sinon
+     */
+    public boolean moveToPosition(Vector2I destination, int maxIterations) {
+        if (isMoving || moveTimer > 0) {
+            System.out.println("Entité déjà en mouvement ou en cooldown");
+            return false;
+        }
+
+        // Vérifier si on est déjà à destination
+        if (position.equals(destination)) {
+            return true;
+        }
+
+        List<Vector2I> foundPath = PathfindingManager.getInstance().findPath(
+                this,
+                position,
+                destination,
+                maxIterations);
+
+        if (foundPath == null || foundPath.size() <= 1) {
+            System.out.println("Impossible d'atteindre (" + destination.x + ", " + destination.y + ")");
+            return false;
+        }
+
+        // Démarrer le suivi du chemin
+        path = foundPath;
+        currentPathIndex = 1;
+        targetCell = path.get(currentPathIndex).cpy();
+        isMoving = true;
+
+        System.out.println("Chemin trouvé: " + path.size() + " cases");
+        return true;
+    }
+
+    /**
+     * Arrête le mouvement en cours
+     */
+    public void stopMovement() {
+        isMoving = false;
+        targetCell = null;
+        path = null;
+        currentPathIndex = 0;
+    }
+
+    private void updateWorldBounds() {
+        Vector2 displayPos = TopDownCameraManager.gameToDisplayCoordinates(position.toVector2());
         float w = renderingSize * TopDownCameraManager.CUBE_WIDTH;
         float h = renderingSize * TopDownCameraManager.CUBE_HEIGHT;
-
-        // Centrage de l'entité sur sa position
-        // float x = displayPos.x - w / 2f;
-        // float y = displayPos.y - h / 2f;
         float x = displayPos.x;
         float y = displayPos.y;
-
         screenBounds.set(x, y, w, h);
     }
 
@@ -122,24 +252,14 @@ public class Entity {
     }
 
     public void renderHitbox(SpriteBatch batch, ShapeRenderer shapeRenderer) {
-        // On arrête le batch pour dessiner les formes
         batch.end();
-
-        // En vue top-down, la hitbox est un simple rectangle
-        // Conversion de la position de la hitbox vers les coordonnées d'affichage
         Vector2 hitboxDisplayPos = TopDownCameraManager.gameToDisplayCoordinates(new Vector2(hitbox.x, hitbox.y));
-
-        // Taille de la hitbox en pixels
         float displayWidth = hitbox.width * TopDownCameraManager.CUBE_WIDTH;
         float displayHeight = hitbox.height * TopDownCameraManager.CUBE_HEIGHT;
-
-        // Dessine le rectangle
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(1, 0, 0, 1);
         shapeRenderer.rect(hitboxDisplayPos.x, hitboxDisplayPos.y, displayWidth, displayHeight);
         shapeRenderer.end();
-
-        // On relance le batch
         batch.begin();
     }
 
@@ -148,8 +268,8 @@ public class Entity {
         HP = Math.max(0, HP - amount);
     }
 
-    public boolean collide(Vector2 position) {
-        return hitbox.contains(position);
+    public boolean collide(Vector2I position) {
+        return hitbox.contains(position.toVector2());
     }
 
     public boolean collide(Entity other) {
@@ -164,45 +284,6 @@ public class Entity {
         return HP <= 0;
     }
 
-    // returns true if reached target
-    public boolean moveTo(Vector2 target, float delta) {
-        Vector2 direction = target.cpy().sub(position);
-        float distanceToTarget = direction.len();
-
-        if (distanceToTarget == 0) {
-            return true;
-        }
-
-        // Utilisation de la normalisation isométrique
-        Vector2 moveVector = TopDownCameraManager.normalize(direction, acceleration * delta);
-        float moveLength = moveVector.len();
-
-        if (moveLength == 0) {
-            return false; // Aucun déplacement nécessaire
-        }
-
-        Vector2 targetPosition;
-        boolean reachedTarget = false;
-
-        if (moveLength >= distanceToTarget) {
-            targetPosition = target.cpy();
-            reachedTarget = true;
-        } else {
-            targetPosition = position.cpy().add(moveVector);
-        }
-
-        // Utiliser le système de glissement pour calculer la nouvelle position
-        Vector2 newPosition = CollisionManager.getInstance().calculateSlideMovement(this, targetPosition);
-
-        // Mettre à jour la position seulement si elle a changé
-        if (!newPosition.equals(position)) {
-            position.set(newPosition);
-        }
-
-        // Retourner true seulement si on a atteint exactement la cible
-        return reachedTarget && position.equals(target);
-    }
-
     public void onKill(Entity victim) {
         if (!victim.getFaction().equals(faction)) {
             xp += victim.xpDrop();
@@ -215,7 +296,7 @@ public class Entity {
     }
 
     // getters
-    public Vector2 getPosition() {
+    public Vector2I getPosition() {
         return position;
     }
 
@@ -258,5 +339,25 @@ public class Entity {
 
     public int getXp() {
         return xp;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public List<Vector2I> getCurrentPath() {
+        return path;
+    }
+
+    public boolean canMove() {
+        return !isMoving && moveTimer <= 0;
+    }
+
+    public float getMoveCooldown() {
+        return MOVE_COOLDOWN;
+    }
+
+    public float getMoveTimer() {
+        return moveTimer;
     }
 }

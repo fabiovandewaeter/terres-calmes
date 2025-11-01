@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.terrescalmes.entities.Entity;
 import com.terrescalmes.entities.EntityManager;
 import com.terrescalmes.items.StatModifier;
+import com.terrescalmes.util.Vector2I;
 
 public class SinglePointEffect implements IAttackEffect {
 
@@ -16,7 +17,7 @@ public class SinglePointEffect implements IAttackEffect {
     }
 
     @Override
-    public void trigger(Entity source, Vector2 position, List<StatModifier> statModifiers) {
+    public void trigger(Entity source, Vector2I position, List<StatModifier> statModifiers) {
         Entity target = EntityManager.getInstance().getEntityAt(position.x, position.y);
 
         int modifiedDamages = applyStatModifiers(statModifiers);
